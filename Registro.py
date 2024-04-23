@@ -65,7 +65,6 @@ class registro:
             archivo.write(musica3)
             archivo.write("\n")
             archivo.close()
-        print("presionó")
     def nombre_existe(self, usuario, archivo):
         with open(archivo, 'r', newline='') as archivo_csv:
             lector_csv = csv.reader(archivo_csv)
@@ -185,7 +184,6 @@ class registro:
         # Botón para elegir música 3
         boton6 = Button(text="Música 3", command=self.Musica3)
         boton6.place(x=310, y=280)
-        print("muestra")
         ventana.mainloop()
 
 #objeto = registro()

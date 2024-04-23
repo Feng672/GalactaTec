@@ -39,7 +39,6 @@ class Inicio:
             menu.Menú.usuario(menu,numero_usuario)
             menu.Menú()
             #messagebox.showinfo(message = "Usuario existente", title = "Éxito")
-        print("presionó")
     def RecuperarContraAux(self, correo):
         if self.CorreoExiste(correo) == True:
             global correo2
@@ -58,7 +57,7 @@ class Inicio:
             boton4.place(x=310, y=130)
             ventana3.mainloop()
         else:
-            print("hay un fallo")
+            pass
     def generar_codigo(self):
         self.codigo = random.randint(10000, 99999)
         #print(self.codigo)
@@ -186,7 +185,6 @@ class Inicio:
         #Botón para recuperar contraseña
         boton3 = Button(text="Recuperar contraseña", command=self.RecuperarContra)
         boton3.place(x=285, y=190)
-        print("muestra")
         ventana.mainloop()
 
 

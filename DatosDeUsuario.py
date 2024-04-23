@@ -176,7 +176,6 @@ class Datos:
         #Botón para cancelar cambios
         boton7 = Button(text="Cancelar", command=self.Cancelar)
         boton7.place(x=300, y=340)
-        print("muestra")
         ventana.mainloop()
 
 #objeto = Datos()
