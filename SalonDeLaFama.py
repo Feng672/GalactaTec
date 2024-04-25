@@ -1,9 +1,7 @@
 # Importar bibliotecas
 from tkinter import *
-
-
-# Globales
-global numero_usuario
+import csv
+from PIL import Image, ImageTk
 
 #Ventana de los mejores jugadores
 class TopPlayersWindow(Toplevel):
@@ -13,20 +11,60 @@ class TopPlayersWindow(Toplevel):
         self.minsize(500, 500)
         self.config(bg="black")
 
-        labels = ["First:", "Second:", "Third:", "Fourth:", "Fifth:"]
-        for i, label_text in enumerate(labels):
+        # Botón de regreso al menú
+        Button(self, text="Atrás", bg='black', fg='white', font=('fixedsys', 20), command=self.back_to_main_menu).grid(row=10, column=1, padx=5, pady=5)
+
+        # Leer datos del archivo csv
+        self.load_data("registro.csv")
+
+        # Labels de photo, name, score
+        column_labels = ["Photo", "Name", "Score"]
+        for i, label_text in enumerate(column_labels):
+            Label(self, text=label_text, bg="black", fg="white", font=('fixedsys', 20)).grid(row=0, column=i+1, padx=5, pady=5)
+            
+        # Labels de first, second, third, fourth, fifth
+        top_labels = ["First:", "Second:", "Third:", "Fourth:", "Fifth:"]
+        for i, label_text in enumerate(top_labels):
             Label(self, text=label_text, bg="black", fg="white", font=('fixedsys', 20)).grid(row=i + 1, column=0, padx=5, pady=5)
 
-        # Botón de regreso al menú
-        Button(self, text="Atrás", bg='black', fg='white', font=('fixedsys', 20), command=self.back_to_main_menu).grid(row=6, column=0, padx=5, pady=5)
+        #Mostrar datos en la ventana
+        self.show_data()
 
-    
-    # Llamar usuarios
-    def usuario(self, posicion):
-        global numero_usuario
-        numero_usuario = posicion
-        print(numero_usuario)
-        
+        #Mostrar imagen
+        self.show_image()
+
+    def load_data(self, filename):
+        self.data = []
+        try:
+            with open(filename, 'r') as file:
+                reader = csv.reader(file)
+                next(reader)  # Saltar encabezado
+                for row in reader:
+                    self.data.append(row)
+        except FileNotFoundError:
+            print("El archivo no se encontró")
+        print("Datos cargados", self.data)
+
+    def show_data(self):
+        if self.data:
+            for i, row in enumerate(self.data):
+                for j, value in enumerate(row):
+                    Label(self, text=value, bg="black", fg="white", font=('fixedsys', 20)).grid(row=i + 2, column=j, padx=5, pady=5)
+        else:
+            Label(self, text="No hay datos disponibles", bg="black", fg="white", font=('fixedsys', 20)).grid(row=2, column=1, columnspan=3, padx=5, pady=5)
+
+    def show_image(self):
+        try:
+            img = Image.open(r"\\Este equipo\\Descargas\\GalactaTec-main\\assets\\campeones.png")
+            img = img.resize((200, 200), Image.ANTIALIAS)  # Redimensionar la imagen
+            photo = ImageTk.PhotoImage(img)
+            canvas = Canvas(self, bg="black", width=200, height=200)
+            canvas.image = photo  
+            canvas.create_image(0, 0, anchor=NW, image=photo)
+            canvas.grid(row=1, column=5, rowspan=5, padx=10, pady=10)
+        except FileNotFoundError:
+            print("No se pudo encontrar la imagen")
+            
     #Función para volver al menu
     def back_to_main_menu(self):
         self.destroy()
@@ -54,7 +92,7 @@ class Menú:
     def __init__(self):
         global ventana
         ventana = Tk()
-        ventana.geometry("900x450")
+        ventana.geometry("700x450")
         #Botón para editar configuaciones
         boton = Button(text = "Editar configuración del usuario", command = self.Datos)
         boton.place(x = 300, y = 70)
@@ -75,6 +113,7 @@ class Menú:
         boton4.place(x=310, y=220)
         ventana.mainloop()
 
+    # Función para mostrar los mejores jugadores
     def show_top_players(self):
         self.ventana.iconify()
         top_players_window = TopPlayersWindow(self.ventana)
@@ -91,5 +130,3 @@ class Menú:
 
 objeto = Menú()
 objeto.__init__()
-
-
