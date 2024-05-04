@@ -17,6 +17,7 @@ BLUE = ( 0, 0, 255)
 
 global numero_usuario
 
+
 archivo = open("registro.csv", "a")
 nombre_archivo = "registro.csv"
 archivoR = open("registro.csv", "r")
@@ -368,6 +369,9 @@ class registro:
 class Menú:
     def Presionó(self):
         print("presionó")
+    def IniciarJugador2(self):
+        ventana7.destroy()
+        inicio2()
     def Datos(self):
         ventana7.destroy()
         dato = Datos()
@@ -386,7 +390,7 @@ class Menú:
         boton2 = Button(text="Editar configuración de la partida", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
         boton2.place(x=190, y=190)
         # Botón para iniciar jugador 2
-        boton = Button(text="Iniciar jugador 2", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
+        boton = Button(text="Iniciar jugador 2", command=self.IniciarJugador2,font=("fixedsys", 20), fg="white", bg="black")
         boton.place(x=310, y=250)
         #Botón para iniciar partida
         boton3 = Button(text="Iniciar partida", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
@@ -558,7 +562,70 @@ class Datos:
         boton7 = Button(text="Cancelar", command=self.Cancelar,font=("fixedsys", 20), fg="white", bg="black")
         boton7.place(x=355, y=570)
         ventana8.mainloop()
+#Clase singleton para jugador dos
+class JugadorDos:
+    _instancia = None
+    def __new__(cls, *args, **kwargs):
+        if not cls._instancia:
+            cls._instancia = super().__new__(cls, *args, **kwargs)
+            cls._instancia.valor = 0
+        return cls._instancia
+    def get_valor(self):
+        return self.valor
+    def set_valor(self, nuevo_valor):
+        self.valor = nuevo_valor
 
+class inicio2:
+    def __init__(self):
+        global ventana9
+        ventana9 = Tk()
+        ventana9.configure(bg="black")
+        ventana9.geometry("900x450")
+        # Caja de texto de usuario
+        caja = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja.place(x=400, y=70)
+        label = Label(ventana9, text="Usuario:", font=("fixedsys", 20), fg="white", bg="black")
+        label.place(x=230, y=70)
+        # Caja de texto de contraseña
+        caja2 = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja2.place(x=400, y=110)
+        label2 = Label(ventana9, text="Contraseña:", font=("fixedsys", 20), fg="white", bg="black")
+        label2.place(x=210, y=110)
+        # Botón para iniciar sesión
+        boton2 = Button(text="Iniciar sesión", command=lambda: self.InicioDeSesion2(caja.get(), caja2.get(), nombre_archivo), font=("fixedsys", 20), fg="white", bg="black")
+        boton2.place(x=330, y=210)
+        ventana9.mainloop()
+    def InicioDeSesion2(self, usuario, contraseña, archivo):
+        if usuario == "" or contraseña == "":
+            messagebox.showinfo(message = "Hay un campo vacío", title = "Error")
+        elif self.usuario_correcto2(usuario, contraseña, archivo) == False:
+            messagebox.showinfo(message = "Usuario o contraseña incorrecta", title = "Error")
+        elif id2.get_valor() == numero_usuario:
+            messagebox.showinfo(message = "Usuario logeado", title = "Error")
+        else:
+            print("jugador 2 logeado exitosamente")
+            print(id2.get_valor())
+    def usuario_correcto2(self, usuario, contraseña, archivo):
+        global numero_usuario
+        global id2
+        id2 = JugadorDos()
+        with open(archivo, 'r', newline='') as archivo_csv:
+            lector_csv = csv.reader(archivo_csv)
+            for fila in lector_csv:
+                if fila[0] == usuario and fila[3] == contraseña:
+                    id2.set_valor(int(fila[7]))
+                    return True
+                    break
+            return False
+    def usuario1(self, usuario, contraseña, id1):
+        with open(archivo, 'r', newline='') as archivo_csv:
+            lector_csv = csv.reader(archivo_csv)
+            for fila in lector_csv:
+                if fila[0] == usuario and fila[3] == contraseña:
+                    numero_usuario = int(fila[7])
+                    return True
+                    break
+            return False
 inicio = Inicio()
 inicio.InicioSesion()
 
