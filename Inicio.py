@@ -375,25 +375,25 @@ class Menú:
         global ventana7
         ventana7 = Tk()
         ventana7.configure(bg="black")
-        ventana7.geometry("900x450")
+        ventana7.geometry("900x500")
         #Botón para editar configuaciones
         boton = Button(text = "Editar configuración del usuario", command = self.Datos,font=("fixedsys", 20), fg="white", bg="black")
-        boton.place(x = 300, y = 70)
+        boton.place(x = 200, y = 70)
         # Botón para ver salón de la fama
         boton = Button(text="Salón de la fama", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
-        boton.place(x=300, y=100)
+        boton.place(x=320, y=130)
         #Botón para editar configuración de la partida
         boton2 = Button(text="Editar configuración de la partida", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
-        boton2.place(x=300, y=130)
+        boton2.place(x=190, y=190)
         # Botón para iniciar jugador 2
         boton = Button(text="Iniciar jugador 2", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
-        boton.place(x=300, y=160)
+        boton.place(x=310, y=250)
         #Botón para iniciar partida
         boton3 = Button(text="Iniciar partida", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
-        boton3.place(x=285, y=190)
+        boton3.place(x=325, y=310)
         #Botón para salir del juego
         boton4 = Button(text="Salir del juego", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
-        boton4.place(x=310, y=220)
+        boton4.place(x=325, y=370)
         ventana7.mainloop()
 
 class Datos:
@@ -497,25 +497,25 @@ class Datos:
         global ventana8
         ventana8 = Tk()
         ventana8.configure(bg="black")
-        ventana8.geometry("900x450")
+        ventana8.geometry("900x900")
         #Caja de texto de usuario
         caja = Entry(font=("fixedsys", 20), fg="white", bg="black")
-        caja.place(x = 280, y = 70)
+        caja.place(x = 355, y = 70)
         caja.insert(0, usuario)
         label = Label(ventana8, text="Usuario:",font=("fixedsys", 20), fg="white", bg="black")
-        label.place(x = 230, y = 70)
+        label.place(x = 220, y = 70)
         #Caja de texto de nombre
         caja2 = Entry(font=("fixedsys", 20), fg="white", bg="black")
-        caja2.place(x=280, y=100)
+        caja2.place(x=355, y=110)
         caja2.insert(0, nombre)
         label2 = Label(ventana8, text="Nombre:",font=("fixedsys", 20), fg="white", bg="black")
-        label2.place(x=228, y=100)
+        label2.place(x=228, y=110)
         #Caja de texto de correo
         caja3 = Entry(font=("fixedsys", 20), fg="white", bg="black")
-        caja3.place(x=280, y=130)
+        caja3.place(x=355, y=150)
         caja3.insert(0, correo)
         label3 = Label(ventana8, text="Correo:",font=("fixedsys", 20), fg="white", bg="black")
-        label3.place(x=230, y=130)
+        label3.place(x=230, y=150)
         #Caja de texto de contraseña
         #self.caja3 = Entry()
         #self.caja3.place(x=280, y=250)
@@ -523,42 +523,42 @@ class Datos:
         #label3.place(x=200, y=250)
         #Botón para aplicar cambios
         boton = Button(text = "Aplicar cambios", command = lambda : self.modificar_datos(caja.get(),caja2.get(), caja3.get(), ruta_imagen, ruta_nave, ruta_musica, ruta_musica2, ruta_musica3),font=("fixedsys", 20), fg="white", bg="black")
-        boton.place(x = 300, y = 310)
+        boton.place(x = 300, y = 510)
         #Botón para elegir fotografía
         boton2 = Button(text="Fotografía", command=self.Foto,font=("fixedsys", 20), fg="white", bg="black")
-        boton2.place(x=300, y=160)
+        boton2.place(x=230, y=210)
         global label4
-        label4 = Label(ventana8, text=imagen)
-        label4.place(x=400, y=160)
+        label4 = Label(ventana8, text=imagen,font=("fixedsys", 20), fg="white", bg="black")
+        label4.place(x=480, y=217)
         #Botón para elegir imagen de nave
         boton3 = Button(text="Imagen de nave", command=self.Nave,font=("fixedsys", 20), fg="white", bg="black")
-        boton3.place(x=285, y=190)
+        boton3.place(x=230, y=270)
         global label5
         label5 = Label(ventana8, text=nave,font=("fixedsys", 20), fg="white", bg="black")
-        label5.place(x=400, y=190)
+        label5.place(x=480, y=277)
         #Botón para elegir música
         boton4 = Button(text="Música", command=self.Musica,font=("fixedsys", 20), fg="white", bg="black")
-        boton4.place(x=310, y=220)
+        boton4.place(x=230, y=330)
         global label6
         label6 = Label(ventana8, text=musica,font=("fixedsys", 20), fg="white", bg="black")
-        label6.place(x=400, y=220)
+        label6.place(x=400, y=337)
         # Botón para elegir música 2
         boton5 = Button(text="Música 2", command=self.Musica2,font=("fixedsys", 20), fg="white", bg="black")
-        boton5.place(x=310, y=250)
+        boton5.place(x=230, y=390)
         global label7
         label7 = Label(ventana8, text=musica2,font=("fixedsys", 20), fg="white", bg="black")
-        label7.place(x=400, y=250)
+        label7.place(x=400, y=397)
         # Botón para elegir música 3
         boton6 = Button(text="Música 3", command=self.Musica3,font=("fixedsys", 20), fg="white", bg="black")
-        boton6.place(x=310, y=280)
+        boton6.place(x=230, y=450)
         global label8
         label8 = Label(ventana8, text=musica3,font=("fixedsys", 20), fg="white", bg="black")
-        label8.place(x=400, y=280)
+        label8.place(x=400, y=457)
         #Botón para cancelar cambios
         boton7 = Button(text="Cancelar", command=self.Cancelar,font=("fixedsys", 20), fg="white", bg="black")
-        boton7.place(x=300, y=340)
+        boton7.place(x=355, y=570)
         ventana8.mainloop()
 
-#inicio = Inicio()
-#inicio.InicioSesion()
+inicio = Inicio()
+inicio.InicioSesion()
 
