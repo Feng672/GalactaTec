@@ -1,12 +1,12 @@
 from tkinter import *
-import Registro
 import csv
 from tkinter import messagebox
-import MenúPrincipal
 import random
 import yagmail
 import threading
 import time
+from tkinter import filedialog
+import os
 
 # Definir colores
 BLACK = ( 0, 0, 0)
@@ -15,17 +15,32 @@ GREEN = ( 0, 255, 0)
 RED = ( 255, 0, 0)
 BLUE = ( 0, 0, 255)
 
+global numero_usuario
+
+archivo = open("registro.csv", "a")
 nombre_archivo = "registro.csv"
-numero_usuario = None
+archivoR = open("registro.csv", "r")
+ruta_musica = ''
+ruta_musica2 = ''
+ruta_musica3 = ''
+
+nombre_archivo = "registro.csv"
 email = 'progra672@gmail.com'
 contraseña = 'znioymdmmtslkgar'
 global destinatario
 #destinatario = 'bryanfeng01@gmail.com'
-asunto = 'Recuperación de contraseña'
+asunto1 = 'Recuperación de contraseña'
+asunto2 = 'Verificación de correo'
 mensaje = 'Este es tu código de verificación'
 yag = yagmail.SMTP(user = email, password=contraseña)
 #yag.send(destinatario, asunto, mensaje)
 
+def contar_lineas_csv(ruta):
+    with open(ruta, 'r') as archivo2:
+        contador_lineas = sum(1 for linea in archivo2)
+    return contador_lineas
+
+contador = contar_lineas_csv(nombre_archivo)
 
 class Inicio:
     def InicioDeSesion(self, usuario, contraseña, archivo):
@@ -35,9 +50,7 @@ class Inicio:
             messagebox.showinfo(message = "Usuario o contraseña incorrecta", title = "Error")
         else:
             ventana.destroy()
-            menu = MenúPrincipal
-            menu.Menú.usuario(menu,numero_usuario)
-            menu.Menú()
+            menu = Menú()
             #messagebox.showinfo(message = "Usuario existente", title = "Éxito")
     def RecuperarContraAux(self, correo):
         if self.CorreoExiste(correo) == True:
@@ -46,14 +59,15 @@ class Inicio:
             self.generar_codigo()
             global ventana3
             ventana3 = Tk()
+            ventana3.configure(bg="black")
             ventana3.geometry("900x450")
             #Caja de código de verificación
-            caja4 = Entry(ventana3)
+            caja4 = Entry(ventana3,font=("fixedsys", 20), fg="white", bg="black")
             caja4.place(x=280, y=70)
-            label4 = Label(ventana3, text="Código:")
+            label4 = Label(ventana3, text="Código:", font=("fixedsys", 20), fg="white", bg="black")
             label4.place(x=230, y=70)
             # Botón de verificar
-            boton4 = Button(ventana3, text ="Verificar", command=lambda : self.VerificarCodigo(self.codigo, int(caja4.get())))
+            boton4 = Button(ventana3, text ="Verificar", command=lambda : self.VerificarCodigo(self.codigo, int(caja4.get())), font=("fixedsys", 20), fg="white", bg="black")
             boton4.place(x=310, y=130)
             ventana3.mainloop()
         else:
@@ -70,7 +84,7 @@ class Inicio:
 
         tiempo_restante = self.tiempo_expiracion - time.time()
         if tiempo_restante > 0:
-            yag.send(correo2, asunto, mensaje + "," + str(self.codigo))
+            yag.send(correo2, asunto1, mensaje + "," + str(self.codigo))
             self.timer = threading.Timer(tiempo_restante, self.generar_codigo)
             self.timer.start()
             messagebox.showinfo(message="Código nuevo enviado, revisar correo", title="Aviso")
@@ -84,20 +98,21 @@ class Inicio:
             ventana3.destroy()
             global ventana4
             ventana4 = Tk()
+            ventana4.configure(bg="black")
             ventana4.geometry("900x450")
             #Caja de contraseña nueva
-            caja5 = Entry(ventana4)
+            caja5 = Entry(ventana4,font=("fixedsys", 20), fg="white", bg="black")
             caja5.place(x=310, y=70)
-            label5 = Label(ventana4, text="Contraseña:")
+            label5 = Label(ventana4, text="Contraseña:",font=("fixedsys", 20), fg="white", bg="black")
             label5.place(x=230, y=70)
             #Botón de cambiar contraseña
-            boton5 = Button(text="Confirmar", command=lambda: self.CambioDeContra(caja5.get(), contraCambiar))
+            boton5 = Button(text="Confirmar", command=lambda: self.CambioDeContra(caja5.get(), contraCambiar),font=("fixedsys", 20), fg="white", bg="black")
             boton5.place(x=310, y=130)
             ventana4.mainloop()
         else:
             messagebox.showinfo(message="Código erróneo", title="Error")
     def CambioDeContra(self, contraseña_nueva, posicion):
-        verificar = Registro.registro
+        verificar = registro
         if verificar.verificar_contra(self, contraseña_nueva) == False:
             fila = int(posicion[7])
             with open(nombre_archivo, 'r', newline='') as archivo_csv:
@@ -127,14 +142,15 @@ class Inicio:
         ventana.destroy()
         global ventana2
         ventana2 = Tk()
+        ventana2.configure(bg="black")
         ventana2.geometry("900x450")
         #Caja de texto de correo
-        caja3 = Entry()
+        caja3 = Entry(font=("fixedsys", 20), fg="white", bg="black")
         caja3.place(x=280, y=70)
-        label3 = Label(ventana2, text="Correo:")
+        label3 = Label(ventana2, text="Correo:",font=("fixedsys", 20), fg="white", bg="black")
         label3.place(x=230, y=70)
         #Botón de enviar
-        boton4 = Button(text="Enviar", command=lambda : self.RecuperarContraAux(caja3.get()))
+        boton4 = Button(text="Enviar", command=lambda : self.RecuperarContraAux(caja3.get()),font=("fixedsys", 20), fg="white", bg="black")
         boton4.place(x=310, y=130)
         ventana2.mainloop()
     def usuario_correcto(self, usuario, contraseña, archivo):
@@ -157,7 +173,7 @@ class Inicio:
             return False
     def Ventana_registro(self):
         ventana.destroy()
-        Registro.registro()
+        registro()
     def InicioSesion(self):
         self.timer = None
         self.codigo = None
@@ -165,28 +181,384 @@ class Inicio:
         self.tiempo_expiracion = None
         global ventana
         ventana = Tk()
+        ventana.configure(bg="black")
         ventana.geometry("900x450")
         #Caja de texto de usuario
-        caja = Entry()
-        caja.place(x = 280, y = 70)
-        label = Label(ventana, text="Usuario:")
+        caja = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja.place(x = 400, y = 70)
+        label = Label(ventana, text="Usuario:",font=("fixedsys", 20), fg="white", bg="black")
         label.place(x = 230, y = 70)
         #Caja de texto de contraseña
-        caja2 = Entry()
-        caja2.place(x=280, y=100)
-        label2 = Label(ventana, text="Contraseña:")
-        label2.place(x=210, y=100)
+        caja2 = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja2.place(x=400, y=110)
+        label2 = Label(ventana, text="Contraseña:",font=("fixedsys", 20), fg="white", bg="black")
+        label2.place(x=210, y=110)
         #Botón para registrarse
-        boton = Button(text = "Registrarse", command = self.Ventana_registro)
-        boton.place(x = 310, y = 130)
+        boton = Button(text = "Registrarse", command = self.Ventana_registro,font=("fixedsys", 20), fg="white", bg="black")
+        boton.place(x = 355, y = 150)
         #Botón para iniciar sesión
-        boton2 = Button(text="Iniciar sesión", command= lambda: self.InicioDeSesion(caja.get(), caja2.get(), nombre_archivo))
-        boton2.place(x=300, y=160)
+        boton2 = Button(text="Iniciar sesión", command= lambda: self.InicioDeSesion(caja.get(), caja2.get(), nombre_archivo),font=("fixedsys", 20), fg="white", bg="black")
+        boton2.place(x=330, y=210)
         #Botón para recuperar contraseña
-        boton3 = Button(text="Recuperar contraseña", command=self.RecuperarContra)
-        boton3.place(x=285, y=190)
+        boton3 = Button(text="Recuperar contraseña", command=self.RecuperarContra,font=("fixedsys", 20), fg="white", bg="black")
+        boton3.place(x=285, y=270)
         ventana.mainloop()
 
+class registro:
+    def Registrarse(self, usuario, nombre, correo, contraseña, foto, nave, musica, musica2, musica3, nombre_archivo):
+        global contador
+        if self.nombre_existe(usuario, nombre_archivo) == True:
+            pass
+        elif self.correo_existe(correo, nombre_archivo) == True:
+            pass
+        elif self.verificar_contra(contraseña) == True:
+            pass
+        elif self.verificacionCorreo(correo) == True:
+            pass
+        else:
+            contador += 1
+            archivo.write(usuario)
+            archivo.write(",")
+            archivo.write(nombre)
+            archivo.write(",")
+            archivo.write(correo)
+            archivo.write(",")
+            archivo.write(contraseña)
+            archivo.write(",")
+            archivo.write(foto)
+            archivo.write(",")
+            archivo.write(nave)
+            archivo.write(",")
+            archivo.write(musica)
+            archivo.write(",")
+            archivo.write(str(contador))
+            archivo.write(",")
+            archivo.write(musica2)
+            archivo.write(",")
+            archivo.write(musica3)
+            archivo.write("\n")
+            archivo.close()
+            ventana6.destroy()
+            ventana5.destroy()
+            login = Inicio
+            login.InicioSesion(login)
+    def nombre_existe(self, usuario, archivo):
+        with open(archivo, 'r', newline='') as archivo_csv:
+            lector_csv = csv.reader(archivo_csv)
+            for fila in lector_csv:
+                if fila[0] == usuario:
+                    messagebox.showinfo(message="Ya existe ese usuario", title = "Error")
+                    return True
+                    break
+            return False
+    def correo_existe(self, correo, archivo):
+        with open(archivo, 'r', newline='') as archivo_csv:
+            lector_csv = csv.reader(archivo_csv)
+            for fila in lector_csv:
+                if fila[2] == correo:
+                    messagebox.showinfo(message="Ya existe ese correo", title = "Error")
+                    return True
+                    break
+            return False
+    def verificar_contra(self, contraseña):
+        if len(contraseña) < 7:
+            messagebox.showinfo(message = "La contraseña debe tener al menos 7 caracteres", title = "Error")
+            return True
 
-inicio = Inicio()
-inicio.InicioSesion()
+        if not any(caracter.isupper() for caracter in contraseña):
+            messagebox.showinfo(message="La contraseña debe tener al menos una mayúscula", title="Error")
+            return True
+
+        if not any(caracter in "!@#$%&/()-_+=[]{}|;:,.<>?/)`~" for caracter in contraseña):
+            messagebox.showinfo(message="La contraseña debe tener al menos un símbolo especial", title="Error")
+            return True
+
+        if not any(caracter.isdigit() for caracter in contraseña):
+            messagebox.showinfo(message="La contraseña debe tener al menos un número", title="Error")
+            return True
+
+        if not any(caracter.islower() for caracter in contraseña):
+            messagebox.showinfo(message="La contraseña debe tener al menos una minúscula", title="Error")
+            return True
+
+        return False
+    def verificacionCorreo(self, correo):
+        codigo = random.randint(10000, 99999)
+        yag.send(correo, asunto2, mensaje + ", " + str(codigo))
+        global ventana6
+        ventana6 = Tk()
+        ventana6.configure(bg="black")
+        ventana6.geometry("900x450")
+        # Caja de texto de código
+        caja5 = Entry(ventana6,font=("fixedsys", 20), fg="white", bg="black")
+        caja5.place(x=350, y=70)
+        label = Label(ventana6, text="Código:",font=("fixedsys", 20), fg="white", bg="black")
+        label.place(x=230, y=70)
+        # Botón para verificar
+        boton7 = Button(ventana6, text ="Verificar", command=lambda : self.verificarCodigo(codigo, int(caja5.get())),font=("fixedsys", 20), fg="white", bg="black")
+        boton7.place(x=370, y=280)
+        ventana6.mainloop()
+    def verificarCodigo(self, codigo, numero):
+        if codigo == numero:
+            return False
+        else:
+            messagebox.showinfo(message="Código erróneo",title="Error")
+            return True
+    def Foto(self):
+        global ruta_imagen
+        ruta_imagen = filedialog.askopenfilename(title = "Seleccionar imagen", filetypes = [("Archivos de imagen", "*.jpg;*.jpeg;*.png")])
+    def Nave(self):
+        global ruta_nave
+        ruta_nave = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.jpg;*.jpeg;*.png")])
+    def Musica(self):
+        global ruta_musica
+        ruta_musica = filedialog.askopenfilename(title="Seleccionar MP3", filetypes=[("Archivos de audio", "*.mp3")])
+    def Musica2(self):
+        global ruta_musica2
+        ruta_musica2 = filedialog.askopenfilename(title="Seleccionar MP3", filetypes=[("Archivos de audio", "*.mp3")])
+    def Musica3(self):
+        global ruta_musica3
+        ruta_musica3 = filedialog.askopenfilename(title="Seleccionar MP3", filetypes=[("Archivos de audio", "*.mp3")])
+
+    def __init__(self):
+        global ventana5
+        ventana5 = Tk()
+        ventana5.configure(bg="black")
+        ventana5.geometry("900x900")
+        #Caja de texto de usuario
+        caja = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja.place(x = 380, y = 70)
+        label = Label(ventana5, text="Usuario:",font=("fixedsys", 20), fg="white", bg="black")
+        label.place(x = 230, y = 70)
+        #Caja de texto de nombre
+        caja2 = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja2.place(x=380, y=110)
+        label2 = Label(ventana5, text="Nombre:",font=("fixedsys", 20), fg="white", bg="black")
+        label2.place(x=228, y=110)
+        #Caja de texto de correo
+        caja3 = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja3.place(x=380, y=150)
+        label3 = Label(ventana5, text="Correo:",font=("fixedsys", 20), fg="white", bg="black")
+        label3.place(x=230, y=150)
+        #Caja de texto de contraseña
+        caja4 = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja4.place(x=380, y=490)
+        label3 = Label(ventana5, text="Contraseña:",font=("fixedsys", 20), fg="white", bg="black")
+        label3.place(x=190, y=490)
+        #Botón para registrarse
+        boton = Button(text = "Registrarse", command = lambda : self.Registrarse(caja.get(), caja2.get(), caja3.get(), caja4.get(), ruta_imagen, ruta_nave, ruta_musica, ruta_musica2, ruta_musica3, nombre_archivo),font=("fixedsys", 20), fg="white", bg="black")
+        boton.place(x = 370, y = 530)
+        #Botón para elegir fotografía
+        boton2 = Button(text="Fotografía", command=self.Foto,font=("fixedsys", 20), fg="white", bg="black")
+        boton2.place(x=380, y=190)
+        #Botón para elegir imagen de nave
+        boton3 = Button(text="Imagen de nave", command=self.Nave,font=("fixedsys", 20), fg="white", bg="black")
+        boton3.place(x=350, y=250)
+        #Botón para elegir música
+        boton4 = Button(text="Música", command=self.Musica,font=("fixedsys", 20), fg="white", bg="black")
+        boton4.place(x=410, y=310)
+        # Botón para elegir música 2
+        boton5 = Button(text="Música 2", command=self.Musica2,font=("fixedsys", 20), fg="white", bg="black")
+        boton5.place(x=395, y=370)
+        # Botón para elegir música 3
+        boton6 = Button(text="Música 3", command=self.Musica3,font=("fixedsys", 20), fg="white", bg="black")
+        boton6.place(x=395, y=430)
+        ventana5.mainloop()
+
+class Menú:
+    def Presionó(self):
+        print("presionó")
+    def Datos(self):
+        ventana7.destroy()
+        dato = Datos()
+    def __init__(self):
+        global ventana7
+        ventana7 = Tk()
+        ventana7.configure(bg="black")
+        ventana7.geometry("900x450")
+        #Botón para editar configuaciones
+        boton = Button(text = "Editar configuración del usuario", command = self.Datos,font=("fixedsys", 20), fg="white", bg="black")
+        boton.place(x = 300, y = 70)
+        # Botón para ver salón de la fama
+        boton = Button(text="Salón de la fama", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
+        boton.place(x=300, y=100)
+        #Botón para editar configuración de la partida
+        boton2 = Button(text="Editar configuración de la partida", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
+        boton2.place(x=300, y=130)
+        # Botón para iniciar jugador 2
+        boton = Button(text="Iniciar jugador 2", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
+        boton.place(x=300, y=160)
+        #Botón para iniciar partida
+        boton3 = Button(text="Iniciar partida", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
+        boton3.place(x=285, y=190)
+        #Botón para salir del juego
+        boton4 = Button(text="Salir del juego", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
+        boton4.place(x=310, y=220)
+        ventana7.mainloop()
+
+class Datos:
+    def iniciarVariables(self):
+        global usuario
+        global nombre
+        global correo
+        global musica
+        global musica2
+        global musica3
+        global imagen
+        global nave
+        global ruta_musica
+        global ruta_musica2
+        global ruta_musica3
+        global ruta_imagen
+        global ruta_nave
+        with open(nombre_archivo, 'r', newline='') as archivo:
+            lector_csv = csv.reader(archivo)
+            datos = list(lector_csv)
+            for fila in datos:
+                if int(fila[7]) == numero_usuario:
+                    usuario = fila[0]
+                    nombre = fila[1]
+                    correo = fila[2]
+                    ruta_imagen = fila[4]
+                    ruta_nave = fila[5]
+                    ruta_musica = fila[6]
+                    ruta_musica2 = fila[8]
+                    ruta_musica3 = fila[9]
+
+        musica = os.path.basename(ruta_musica)
+        musica2 = os.path.basename(ruta_musica2)
+        musica3 = os.path.basename(ruta_musica3)
+        imagen = os.path.basename(ruta_imagen)
+        nave = os.path.basename(ruta_nave)
+    def Cancelar(self):
+        ventana8.destroy()
+        self.Datos()
+    def leer_datos_csv(self, ruta):
+        with open(nombre_archivo, 'r', newline='') as archivo:
+            lector_csv = csv.reader(archivo)
+            datos = list(lector_csv)
+        return datos
+    def escribir_datos_csv(self, datos, ruta):
+        with open(ruta, 'w', newline='') as archivo2:
+            escritor_csv = csv.writer(archivo2)
+            for fila in datos:
+                escritor_csv.writerow(fila)
+        ventana8.destroy()
+    def modificar_datos(self,nuevo_usuario,nuevo_nombre,nuevo_correo,nueva_foto,nueva_nave,nueva_música,nueva_música2,nueva_música3):
+        datos = self.leer_datos_csv(nombre_archivo)
+
+        for fila in datos:
+            if int(fila[7]) == numero_usuario:
+                fila[0] = nuevo_usuario
+                fila[1] = nuevo_nombre
+                fila[2] = nuevo_correo
+                fila[4] = nueva_foto
+                fila[5] = nueva_nave
+                fila[6] = nueva_música
+                fila[8] = nueva_música2
+                fila[9] = nueva_música3
+                break
+
+        self.escribir_datos_csv(datos, nombre_archivo)
+
+    def Foto(self):
+        global ruta_imagen
+        ruta_imagen = filedialog.askopenfilename(title = "Seleccionar imagen", filetypes = [("Archivos de imagen", "*.jpg;*.jpeg;*.png")])
+        imagen = os.path.basename(ruta_imagen)
+        label4 = Label(ventana8, text=imagen,font=("fixedsys", 20), fg="white", bg="black")
+        label4.place(x = 400, y = 160)
+    def Nave(self):
+        global ruta_nave
+        ruta_nave = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.jpg;*.jpeg;*.png")])
+        nave = os.path.basename(ruta_nave)
+        label5 = Label(ventana8, text=nave,font=("fixedsys", 20), fg="white", bg="black")
+        label5.place(x=400, y=190)
+    def Musica(self):
+        global ruta_musica
+        ruta_musica = filedialog.askopenfilename(title="Seleccionar MP3", filetypes=[("Archivos de audio", "*.mp3")])
+        musica = os.path.basename(ruta_musica)
+        label6 = Label(ventana8, text=musica,font=("fixedsys", 20), fg="white", bg="black")
+        label6.place(x=400, y=220)
+    def Musica2(self):
+        global ruta_musica2
+        ruta_musica2 = filedialog.askopenfilename(title="Seleccionar MP3", filetypes=[("Archivos de audio", "*.mp3")])
+        musica2 = os.path.basename(ruta_musica2)
+        label7 = Label(ventana8, text=musica2,font=("fixedsys", 20), fg="white", bg="black")
+        label7.place(x=400, y=250)
+    def Musica3(self):
+        global ruta_musica3
+        ruta_musica3 = filedialog.askopenfilename(title="Seleccionar MP3", filetypes=[("Archivos de audio", "*.mp3")])
+        musica3 = os.path.basename(ruta_musica3)
+        label8 = Label(ventana8, text=musica3,font=("fixedsys", 20), fg="white", bg="black")
+        label8.place(x=400, y=280)
+
+    def __init__(self):
+        self.iniciarVariables()
+        global ventana8
+        ventana8 = Tk()
+        ventana8.configure(bg="black")
+        ventana8.geometry("900x450")
+        #Caja de texto de usuario
+        caja = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja.place(x = 280, y = 70)
+        caja.insert(0, usuario)
+        label = Label(ventana8, text="Usuario:",font=("fixedsys", 20), fg="white", bg="black")
+        label.place(x = 230, y = 70)
+        #Caja de texto de nombre
+        caja2 = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja2.place(x=280, y=100)
+        caja2.insert(0, nombre)
+        label2 = Label(ventana8, text="Nombre:",font=("fixedsys", 20), fg="white", bg="black")
+        label2.place(x=228, y=100)
+        #Caja de texto de correo
+        caja3 = Entry(font=("fixedsys", 20), fg="white", bg="black")
+        caja3.place(x=280, y=130)
+        caja3.insert(0, correo)
+        label3 = Label(ventana8, text="Correo:",font=("fixedsys", 20), fg="white", bg="black")
+        label3.place(x=230, y=130)
+        #Caja de texto de contraseña
+        #self.caja3 = Entry()
+        #self.caja3.place(x=280, y=250)
+        #label3 = Label(ventana, text="Contraseña:")
+        #label3.place(x=200, y=250)
+        #Botón para aplicar cambios
+        boton = Button(text = "Aplicar cambios", command = lambda : self.modificar_datos(caja.get(),caja2.get(), caja3.get(), ruta_imagen, ruta_nave, ruta_musica, ruta_musica2, ruta_musica3),font=("fixedsys", 20), fg="white", bg="black")
+        boton.place(x = 300, y = 310)
+        #Botón para elegir fotografía
+        boton2 = Button(text="Fotografía", command=self.Foto,font=("fixedsys", 20), fg="white", bg="black")
+        boton2.place(x=300, y=160)
+        global label4
+        label4 = Label(ventana8, text=imagen)
+        label4.place(x=400, y=160)
+        #Botón para elegir imagen de nave
+        boton3 = Button(text="Imagen de nave", command=self.Nave,font=("fixedsys", 20), fg="white", bg="black")
+        boton3.place(x=285, y=190)
+        global label5
+        label5 = Label(ventana8, text=nave,font=("fixedsys", 20), fg="white", bg="black")
+        label5.place(x=400, y=190)
+        #Botón para elegir música
+        boton4 = Button(text="Música", command=self.Musica,font=("fixedsys", 20), fg="white", bg="black")
+        boton4.place(x=310, y=220)
+        global label6
+        label6 = Label(ventana8, text=musica,font=("fixedsys", 20), fg="white", bg="black")
+        label6.place(x=400, y=220)
+        # Botón para elegir música 2
+        boton5 = Button(text="Música 2", command=self.Musica2,font=("fixedsys", 20), fg="white", bg="black")
+        boton5.place(x=310, y=250)
+        global label7
+        label7 = Label(ventana8, text=musica2,font=("fixedsys", 20), fg="white", bg="black")
+        label7.place(x=400, y=250)
+        # Botón para elegir música 3
+        boton6 = Button(text="Música 3", command=self.Musica3,font=("fixedsys", 20), fg="white", bg="black")
+        boton6.place(x=310, y=280)
+        global label8
+        label8 = Label(ventana8, text=musica3,font=("fixedsys", 20), fg="white", bg="black")
+        label8.place(x=400, y=280)
+        #Botón para cancelar cambios
+        boton7 = Button(text="Cancelar", command=self.Cancelar,font=("fixedsys", 20), fg="white", bg="black")
+        boton7.place(x=300, y=340)
+        ventana8.mainloop()
+
+#inicio = Inicio()
+#inicio.InicioSesion()
+
