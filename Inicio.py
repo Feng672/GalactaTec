@@ -16,6 +16,8 @@ RED = ( 255, 0, 0)
 BLUE = ( 0, 0, 255)
 
 global numero_usuario
+global id2
+
 
 
 archivo = open("registro.csv", "a")
@@ -374,7 +376,7 @@ class Menú:
         inicio2()
     def Datos(self):
         ventana7.destroy()
-        dato = Datos()
+        Datos(1,numero_usuario)
     def __init__(self):
         global ventana7
         ventana7 = Tk()
@@ -401,7 +403,7 @@ class Menú:
         ventana7.mainloop()
 
 class Datos:
-    def iniciarVariables(self):
+    def iniciarVariables(self, id):
         global usuario
         global nombre
         global correo
@@ -419,7 +421,7 @@ class Datos:
             lector_csv = csv.reader(archivo)
             datos = list(lector_csv)
             for fila in datos:
-                if int(fila[7]) == numero_usuario:
+                if int(fila[7]) == id:
                     usuario = fila[0]
                     nombre = fila[1]
                     correo = fila[2]
@@ -436,7 +438,10 @@ class Datos:
         nave = os.path.basename(ruta_nave)
     def Cancelar(self):
         ventana8.destroy()
-        self.Datos()
+        if modo == 1:
+            Menú()
+        else:
+            Menú2()
     def leer_datos_csv(self, ruta):
         with open(nombre_archivo, 'r', newline='') as archivo:
             lector_csv = csv.reader(archivo)
@@ -448,6 +453,10 @@ class Datos:
             for fila in datos:
                 escritor_csv.writerow(fila)
         ventana8.destroy()
+        if modo == 1:
+            Menú()
+        else:
+            Menú2()
     def modificar_datos(self,nuevo_usuario,nuevo_nombre,nuevo_correo,nueva_foto,nueva_nave,nueva_música,nueva_música2,nueva_música3):
         datos = self.leer_datos_csv(nombre_archivo)
 
@@ -496,8 +505,10 @@ class Datos:
         label8 = Label(ventana8, text=musica3,font=("fixedsys", 20), fg="white", bg="black")
         label8.place(x=400, y=280)
 
-    def __init__(self):
-        self.iniciarVariables()
+    def __init__(self, cantidad_de_jugador, id):
+        self.iniciarVariables(id)
+        global modo
+        modo = cantidad_de_jugador
         global ventana8
         ventana8 = Tk()
         ventana8.configure(bg="black")
@@ -596,6 +607,8 @@ class inicio2:
         boton2.place(x=330, y=210)
         ventana9.mainloop()
     def InicioDeSesion2(self, usuario, contraseña, archivo):
+        global id2
+        id2 = JugadorDos()
         if usuario == "" or contraseña == "":
             messagebox.showinfo(message = "Hay un campo vacío", title = "Error")
         elif self.usuario_correcto2(usuario, contraseña, archivo) == False:
@@ -603,12 +616,10 @@ class inicio2:
         elif id2.get_valor() == numero_usuario:
             messagebox.showinfo(message = "Usuario logeado", title = "Error")
         else:
-            print("jugador 2 logeado exitosamente")
-            print(id2.get_valor())
+            ventana9.destroy()
+            Menú2()
     def usuario_correcto2(self, usuario, contraseña, archivo):
         global numero_usuario
-        global id2
-        id2 = JugadorDos()
         with open(archivo, 'r', newline='') as archivo_csv:
             lector_csv = csv.reader(archivo_csv)
             for fila in lector_csv:
@@ -626,6 +637,60 @@ class inicio2:
                     return True
                     break
             return False
+
+class Menú2:
+    def Datos(self,id):
+        ventana10.destroy()
+        Datos(2, id)
+    def Presionó(self):
+        pass
+    def __init__(self):
+        global ventana10
+        ventana10 = Tk()
+        ventana10.configure(bg="black")
+        ventana10.geometry("1700x500")
+        # Etiqueta que indica que los botones son del jugador 1
+        label = Label(ventana10, text="Jugador 1", font=("fixedsys", 20), fg="white", bg="black")
+        label.place(x=390, y=50)
+        # Botón para editar configuaciones
+        boton = Button(text="Editar configuración del usuario", command=lambda : self.Datos(numero_usuario), font=("fixedsys", 20), fg="white",
+                       bg="black")
+        boton.place(x=200, y=110)
+        # Botón para ver salón de la fama
+        boton2 = Button(text="Salón de la fama", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton2.place(x=320, y=170)
+        # Botón para editar configuración de la partida
+        boton3 = Button(text="Editar configuración de la partida", command=self.Presionó, font=("fixedsys", 20),
+                        fg="white", bg="black")
+        boton3.place(x=190, y=230)
+        # Botón para iniciar partida
+        boton4 = Button(text="Iniciar partida", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton4.place(x=325, y=290)
+        # Botón para salir del juego
+        boton5 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton5.place(x=325, y=350)
+
+        # Etiqueta que indica que los botones son del jugador 2
+        label2 = Label(ventana10, text="Jugador 2", font=("fixedsys", 20), fg="white", bg="black")
+        label2.place(x=1190, y=50)
+        # Botón para editar configuaciones para jugador 2
+        boton6 = Button(text="Editar configuración del usuario", command=lambda :self.Datos(id2.get_valor()), font=("fixedsys", 20), fg="white",
+                       bg="black")
+        boton6.place(x=1000, y=110)
+        # Botón para ver salón de la fama para jugador 2
+        boton7 = Button(text="Salón de la fama", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton7.place(x=1120, y=170)
+        # Botón para editar configuración de la partida para jugador 2
+        boton8 = Button(text="Editar configuración de la partida", command=self.Presionó, font=("fixedsys", 20),
+                        fg="white", bg="black")
+        boton8.place(x=990, y=230)
+        # Botón para iniciar partida para jugador 2
+        boton9 = Button(text="Iniciar partida", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton9.place(x=1125, y=290)
+        # Botón para salir del juego para jugador 2
+        boton10 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton10.place(x=1125, y=350)
+        ventana10.mainloop()
 inicio = Inicio()
 inicio.InicioSesion()
-
+#Menú2()
