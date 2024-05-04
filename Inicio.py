@@ -1,4 +1,5 @@
 from tkinter import *
+import tkinter as tk
 import csv
 from tkinter import messagebox
 import random
@@ -7,6 +8,7 @@ import threading
 import time
 from tkinter import filedialog
 import os
+from PIL import Image, ImageTk
 
 # Definir colores
 BLACK = ( 0, 0, 0)
@@ -17,7 +19,7 @@ BLUE = ( 0, 0, 255)
 
 global numero_usuario
 global id2
-
+global primeros_cinco
 
 
 archivo = open("registro.csv", "a")
@@ -206,6 +208,17 @@ class Inicio:
         boton3 = Button(text="Recuperar contraseña", command=self.RecuperarContra,font=("fixedsys", 20), fg="white", bg="black")
         boton3.place(x=285, y=270)
         ventana.mainloop()
+#[0]usuario
+#[1]nombre
+#[2]correo
+#[3]contraseña
+#[4]foto
+#[5]nave
+#[6]musica
+#[7]id
+#[8]musica2
+#[9]musica3
+#[10]puntaje
 
 class registro:
     def Registrarse(self, usuario, nombre, correo, contraseña, foto, nave, musica, musica2, musica3, nombre_archivo):
@@ -239,6 +252,8 @@ class registro:
             archivo.write(musica2)
             archivo.write(",")
             archivo.write(musica3)
+            archivo.write(",")
+            archivo.write("0")
             archivo.write("\n")
             archivo.close()
             ventana6.destroy()
@@ -377,6 +392,12 @@ class Menú:
     def Datos(self):
         ventana7.destroy()
         Datos(1,numero_usuario)
+    def salón(self):
+        global primeros_cinco
+        ventana7.destroy()
+        observador = ObserverCSV()
+        observador.__int__()
+        SalonDeLaFama(primeros_cinco,1)
     def __init__(self):
         global ventana7
         ventana7 = Tk()
@@ -386,7 +407,7 @@ class Menú:
         boton = Button(text = "Editar configuración del usuario", command = self.Datos,font=("fixedsys", 20), fg="white", bg="black")
         boton.place(x = 200, y = 70)
         # Botón para ver salón de la fama
-        boton = Button(text="Salón de la fama", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
+        boton = Button(text="Salón de la fama", command=self.salón,font=("fixedsys", 20), fg="white", bg="black")
         boton.place(x=320, y=130)
         #Botón para editar configuración de la partida
         boton2 = Button(text="Editar configuración de la partida", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
@@ -644,6 +665,12 @@ class Menú2:
         Datos(2, id)
     def Presionó(self):
         pass
+    def salón(self):
+        global primeros_cinco
+        ventana10.destroy()
+        observador = ObserverCSV()
+        observador.__int__()
+        SalonDeLaFama(primeros_cinco,2)
     def __init__(self):
         global ventana10
         ventana10 = Tk()
@@ -657,7 +684,7 @@ class Menú2:
                        bg="black")
         boton.place(x=200, y=110)
         # Botón para ver salón de la fama
-        boton2 = Button(text="Salón de la fama", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton2 = Button(text="Salón de la fama", command=self.salón, font=("fixedsys", 20), fg="white", bg="black")
         boton2.place(x=320, y=170)
         # Botón para editar configuración de la partida
         boton3 = Button(text="Editar configuración de la partida", command=self.Presionó, font=("fixedsys", 20),
@@ -678,7 +705,7 @@ class Menú2:
                        bg="black")
         boton6.place(x=1000, y=110)
         # Botón para ver salón de la fama para jugador 2
-        boton7 = Button(text="Salón de la fama", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton7 = Button(text="Salón de la fama", command=self.salón, font=("fixedsys", 20), fg="white", bg="black")
         boton7.place(x=1120, y=170)
         # Botón para editar configuración de la partida para jugador 2
         boton8 = Button(text="Editar configuración de la partida", command=self.Presionó, font=("fixedsys", 20),
@@ -706,6 +733,225 @@ class IniciarPartida:
                         jugador2 = fila[0]
             jugador_inicial = random.choice([jugador1,jugador2])
             print("El jugador " + jugador_inicial + " iniciará la partida")
+
+# Clase observer para saber cuándo se modifica el archivo CSV
+class ObserverCSV:
+    def __int__(self):
+        global primeros_cinco
+        global puntajes
+        puntajes = []
+        with open(nombre_archivo, 'r') as file:
+            reader = csv.reader(file)
+            for fila in reader:
+                puntajes.append([int(fila[10]),int(fila[7])])
+        self.sort(puntajes)
+        primeros_cinco = puntajes[:5]
+    def sort(self, lista_de_puntuaciones):
+        n = len(lista_de_puntuaciones)
+        for i in range(n):
+            for j in range(0, n-i-1):
+                # Si el primer elemento de la lista j es menor que el de j+1, intercambiar
+                if lista_de_puntuaciones[j][0] < lista_de_puntuaciones[j+1][0]:
+                    lista_de_puntuaciones[j], lista_de_puntuaciones[j+1] = lista_de_puntuaciones[j+1], lista_de_puntuaciones[j]
+
+class SalonDeLaFama:
+    def Iniciar_Variables(self, top5):
+        global usuario1
+        global usuario2
+        global usuario3
+        global usuario4
+        global usuario5
+        global foto1
+        global foto2
+        global foto3
+        global foto4
+        global foto5
+        global ganador1
+        global ganador2
+        global ganador3
+        global ganador4
+        global ganador5
+        global puntuacion1
+        global puntuacion2
+        global puntuacion3
+        global puntuacion4
+        global puntuacion5
+        ganador1 = 0
+        ganador2 = 0
+        ganador3 = 0
+        ganador4 = 0
+        ganador5 = 0
+        puntuacion1 = 0
+        puntuacion2 = 0
+        puntuacion3 = 0
+        puntuacion4 = 0
+        puntuacion5 = 0
+        largo = len(top5)
+        if largo == 1:
+            ganador1 = top5[0][1]
+            puntuacion1 = top5[0][0]
+        elif largo == 2:
+            ganador1 = top5[0][1]
+            puntuacion1 = top5[0][0]
+            ganador2 = top5[1][1]
+            puntuacion2 = top5[1][0]
+        elif largo == 3:
+            ganador1 = top5[0][1]
+            puntuacion1 = top5[0][0]
+            ganador2 = top5[1][1]
+            puntuacion2 = top5[1][0]
+            ganador3 = top5[2][1]
+            puntuacion3 = top5[2][0]
+        elif largo == 4:
+            ganador1 = top5[0][1]
+            puntuacion1 = top5[0][0]
+            ganador2 = top5[1][1]
+            puntuacion2 = top5[1][0]
+            ganador3 = top5[2][1]
+            puntuacion3 = top5[2][0]
+            ganador4 = top5[3][1]
+            puntuacion4 = top5[3][0]
+        elif largo == 5:
+            ganador1 = top5[0][1]
+            puntuacion1 = top5[0][0]
+            ganador2 = top5[1][1]
+            puntuacion2 = top5[1][0]
+            ganador3 = top5[2][1]
+            puntuacion3 = top5[2][0]
+            ganador4 = top5[3][1]
+            puntuacion4 = top5[3][0]
+            ganador5 = top5[4][1]
+            puntuacion5 = top5[4][0]
+        with open(nombre_archivo, 'r') as file:
+            reader = csv.reader(file)
+            for fila in reader:
+                if int(fila[7]) == ganador1:
+                    usuario1 = fila[0]
+                    foto1 = fila[4]
+                elif int(fila[7]) == ganador2:
+                    usuario2 = fila[0]
+                    foto2 = fila[4]
+                elif int(fila[7]) == ganador3:
+                    usuario3 = fila[0]
+                    foto3 = fila[4]
+                elif int(fila[7]) == ganador4:
+                    usuario4 = fila[0]
+                    foto4 = fila[4]
+                elif int(fila[7]) == ganador5:
+                    usuario5 = fila[0]
+                    foto5 = fila[4]
+
+    def Regresar(self,modo):
+        ventana11.destroy()
+        if modo == 1:
+            Menú()
+        else:
+            Menú2()
+
+    def __init__(self, top5, modo):
+        self.Iniciar_Variables(top5)
+        global ventana11
+        ventana11 = Tk()
+        ventana11.geometry("900x800")
+        ventana11.configure(bg="black")
+        label = Label(ventana11, text="Primer lugar",font=("fixedsys", 20), fg="white", bg="black")
+        label.place(x = 50, y = 100)
+        label2 = Label(ventana11, text="Segundo lugar", font=("fixedsys", 20), fg="white", bg="black")
+        label2.place(x=50, y=200)
+        label3 = Label(ventana11, text="Tercer lugar", font=("fixedsys", 20), fg="white", bg="black")
+        label3.place(x=50, y=300)
+        label4 = Label(ventana11, text="Cuarto lugar", font=("fixedsys", 20), fg="white", bg="black")
+        label4.place(x=50, y=400)
+        label5 = Label(ventana11, text="Quinto lugar", font=("fixedsys", 20), fg="white", bg="black")
+        label5.place(x=50, y=500)
+        label16 = Label(ventana11, text="Foto", font=("fixedsys", 20), fg="white", bg="black")
+        label16.place(x=300, y=25)
+        label17 = Label(ventana11, text="Usuario", font=("fixedsys", 20), fg="white", bg="black")
+        label17.place(x=450, y=25)
+        label18 = Label(ventana11, text="puntuación", font=("fixedsys", 20), fg="white", bg="black")
+        label18.place(x=700, y=25)
+        nuevo_tamaño = (80, 80)
+        boton = Button(text="Regresar", command=lambda :self.Regresar(modo), font=("fixedsys", 20), fg="white", bg="black")
+        boton.place(x= 375, y= 700)
+        imagen14 = Image.open("Campeón.png")
+        imagen15 = imagen14.resize(nuevo_tamaño)
+        imagen16 = ImageTk.PhotoImage(imagen15)
+        label_imagen6 = tk.Label(image=imagen16)
+        label_imagen6.place(x=100, y=15)
+        if puntuacion1 == 0:
+            label19 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
+            label19.place(x=450, y=100)
+        else:
+            imagen1 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen2 = imagen1.resize(nuevo_tamaño)
+            imagen = ImageTk.PhotoImage(imagen2)
+            label_imagen = tk.Label(ventana11, image=imagen)
+            label_imagen.place(x=300, y=70)
+            label6 = Label(ventana11, text=usuario1, font=("fixedsys", 20), fg="white", bg="black")
+            label6.place(x=450, y=100)
+            label11 = Label(ventana11, text=puntuacion1, font=("fixedsys", 20), fg="white", bg="black")
+            label11.place(x=700, y=100)
+        if puntuacion2 == 0:
+            label20 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
+            label20.place(x=450, y=200)
+        else:
+            imagen2 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen3 = imagen2.resize(nuevo_tamaño)
+            imagen4 = ImageTk.PhotoImage(imagen3)
+            label_imagen2 = tk.Label(ventana11, image=imagen4)
+            label_imagen2.place(x=300, y=180)
+            label7 = Label(ventana11, text=usuario2, font=("fixedsys", 20), fg="white", bg="black")
+            label7.place(x=450, y=200)
+            label12 = Label(ventana11, text=puntuacion2, font=("fixedsys", 20), fg="white", bg="black")
+            label12.place(x=700, y=200)
+        if puntuacion3 == 0:
+            label21 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
+            label21.place(x=450, y=300)
+        else:
+            imagen5 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen6 = imagen5.resize(nuevo_tamaño)
+            imagen7 = ImageTk.PhotoImage(imagen6)
+            label_imagen3 = tk.Label(ventana11, image=imagen7)
+            label_imagen3.place(x=300, y=290)
+            label8 = Label(ventana11, text=usuario3, font=("fixedsys", 20), fg="white", bg="black")
+            label8.place(x=450, y=300)
+            label13 = Label(ventana11, text=puntuacion3, font=("fixedsys", 20), fg="white", bg="black")
+            label13.place(x=700, y=300)
+        if puntuacion4 == 0:
+            label22 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
+            label22.place(x=450, y=400)
+        else:
+            imagen8 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen9 = imagen8.resize(nuevo_tamaño)
+            imagen10 = ImageTk.PhotoImage(imagen9)
+            label_imagen4 = tk.Label(ventana11, image=imagen10)
+            label_imagen4.place(x=300, y=400)
+            label9 = Label(ventana11, text=usuario4, font=("fixedsys", 20), fg="white", bg="black")
+            label9.place(x=450, y=400)
+            label14 = Label(ventana11, text=puntuacion4, font=("fixedsys", 20), fg="white", bg="black")
+            label14.place(x=700, y=400)
+        if puntuacion5 == 0:
+            label23 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
+            label23.place(x=450, y=500)
+        else:
+            imagen11 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen12 = imagen11.resize(nuevo_tamaño)
+            imagen13 = ImageTk.PhotoImage(imagen12)
+            label_imagen5 = tk.Label(ventana11, image=imagen13)
+            label_imagen5.place(x=300, y=510)
+            label10 = Label(ventana11, text=usuario5, font=("fixedsys", 20), fg="white", bg="black")
+            label10.place(x=450, y=500)
+            label15 = Label(ventana11, text=puntuacion5, font=("fixedsys", 20), fg="white", bg="black")
+            label15.place(x=700, y=500)
+        if top5[0][0] == 0:
+            pass
+        else:
+           # imagen1 = Image.open()
+            #imagen = ImageTk.PhotoImage(imagen1)
+            pass
+        ventana11.mainloop()
+#prueba = SalonDeLaFama
+#prueba([[200,1],[10,2]])
 inicio = Inicio()
 inicio.InicioSesion()
 #Menú2()
