@@ -9,6 +9,7 @@ import time
 from tkinter import filedialog
 import os
 from PIL import Image, ImageTk
+from tkinter import ttk
 
 # Definir colores
 BLACK = ( 0, 0, 0)
@@ -20,7 +21,9 @@ BLUE = ( 0, 0, 255)
 global numero_usuario
 global id2
 global primeros_cinco
-
+opcion_seleccionada = None
+opcion_seleccionada2 = None
+opcion_seleccionada3 = None
 
 archivo = open("registro.csv", "a")
 nombre_archivo = "registro.csv"
@@ -398,6 +401,9 @@ class Menú:
         observador = ObserverCSV()
         observador.__int__()
         SalonDeLaFama(primeros_cinco,1)
+    def ConfiPartida(self):
+        ventana7.destroy()
+        ConfiguracionDeLaPartida(1)
     def __init__(self):
         global ventana7
         ventana7 = Tk()
@@ -410,7 +416,7 @@ class Menú:
         boton = Button(text="Salón de la fama", command=self.salón,font=("fixedsys", 20), fg="white", bg="black")
         boton.place(x=320, y=130)
         #Botón para editar configuración de la partida
-        boton2 = Button(text="Editar configuración de la partida", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
+        boton2 = Button(text="Editar configuración de la partida", command=self.ConfiPartida,font=("fixedsys", 20), fg="white", bg="black")
         boton2.place(x=190, y=190)
         # Botón para iniciar jugador 2
         boton = Button(text="Iniciar jugador 2", command=self.IniciarJugador2,font=("fixedsys", 20), fg="white", bg="black")
@@ -671,6 +677,9 @@ class Menú2:
         observador = ObserverCSV()
         observador.__int__()
         SalonDeLaFama(primeros_cinco,2)
+    def ConfiPartida(self):
+        ventana10.destroy()
+        ConfiguracionDeLaPartida(2)
     def __init__(self):
         global ventana10
         ventana10 = Tk()
@@ -687,7 +696,7 @@ class Menú2:
         boton2 = Button(text="Salón de la fama", command=self.salón, font=("fixedsys", 20), fg="white", bg="black")
         boton2.place(x=320, y=170)
         # Botón para editar configuración de la partida
-        boton3 = Button(text="Editar configuración de la partida", command=self.Presionó, font=("fixedsys", 20),
+        boton3 = Button(text="Editar configuración de la partida", command= self.ConfiPartida, font=("fixedsys", 20),
                         fg="white", bg="black")
         boton3.place(x=190, y=230)
         # Botón para iniciar partida
@@ -708,7 +717,7 @@ class Menú2:
         boton7 = Button(text="Salón de la fama", command=self.salón, font=("fixedsys", 20), fg="white", bg="black")
         boton7.place(x=1120, y=170)
         # Botón para editar configuración de la partida para jugador 2
-        boton8 = Button(text="Editar configuración de la partida", command=self.Presionó, font=("fixedsys", 20),
+        boton8 = Button(text="Editar configuración de la partida", command= self.ConfiPartida, font=("fixedsys", 20),
                         fg="white", bg="black")
         boton8.place(x=990, y=230)
         # Botón para iniciar partida para jugador 2
@@ -950,8 +959,57 @@ class SalonDeLaFama:
             #imagen = ImageTk.PhotoImage(imagen1)
             pass
         ventana11.mainloop()
-#prueba = SalonDeLaFama
-#prueba([[200,1],[10,2]])
+
+class ConfiguracionDeLaPartida:
+    def actualizar_opcion(self, modo):
+        global opcion_seleccionada
+        global opcion_seleccionada2
+        global opcion_seleccionada3
+        opcion_seleccionada = opcion.get()
+        opcion_seleccionada2 = opcion2.get()
+        opcion_seleccionada3 = opcion3.get()
+        ventana12.destroy()
+        if modo == 1:
+            Menú()
+        else:
+            Menú2()
+    def __init__(self,modo):
+        global ventana12
+        global opcion
+        global opcion2
+        global opcion3
+        ventana12 = Tk()
+        ventana12.geometry("900x500")
+        ventana12.configure(bg="black")
+        label = Label(ventana12, text="Nivel 1", font=("fixedsys", 20), fg="white", bg="black")
+        label.place(x=50, y=100)
+        opciones = ["Patrón 1", "Patrón 2", "Patrón 3", "Patrón 4", "Patrón 5"]
+        opcion = tk.StringVar(ventana12, value=opcion_seleccionada)
+        menu_desplegable = ttk.Combobox(ventana12, textvariable=opcion, values=opciones)
+        menu_desplegable.pack()
+        menu_desplegable.config(font=("fixedsys", 20), background="black", foreground="black", width=10,state="readonly")
+        menu_desplegable.place(x=15, y=150)
+        boton = Button(text ="Confirmar",command=lambda :self.actualizar_opcion(modo), font=("fixedsys", 20), fg="white", bg="black")
+        boton.place(x=365, y=400)
+
+        label2 = Label(ventana12, text="Nivel 2", font=("fixedsys", 20), fg="white", bg="black")
+        label2.place(x=385, y=100)
+        opcion2 = tk.StringVar(ventana12, value=opcion_seleccionada2)
+        menu_desplegable2 = ttk.Combobox(ventana12, textvariable=opcion2, values=opciones)
+        menu_desplegable2.pack()
+        menu_desplegable2.config(font=("fixedsys", 20), background="black", foreground="black", width=10,state="readonly")
+        menu_desplegable2.place(x=350, y=150)
+
+        label3 = Label(ventana12, text="Nivel 3", font=("fixedsys", 20), fg="white", bg="black")
+        label3.place(x=735, y=100)
+        opcion3 = tk.StringVar(ventana12, value=opcion_seleccionada3)
+        menu_desplegable3 = ttk.Combobox(ventana12, textvariable=opcion3, values=opciones)
+        menu_desplegable3.pack()
+        menu_desplegable3.config(font=("fixedsys", 20), background="black", foreground="black", width=10, state="readonly")
+        menu_desplegable3.place(x=700, y=150)
+        ventana12.mainloop()
+
+#ConfiguracionDeLaPartida()
 inicio = Inicio()
 inicio.InicioSesion()
 #Menú2()
