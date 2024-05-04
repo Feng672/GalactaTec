@@ -395,7 +395,7 @@ class Menú:
         boton = Button(text="Iniciar jugador 2", command=self.IniciarJugador2,font=("fixedsys", 20), fg="white", bg="black")
         boton.place(x=310, y=250)
         #Botón para iniciar partida
-        boton3 = Button(text="Iniciar partida", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
+        boton3 = Button(text="Iniciar partida", command=lambda:IniciarPartida(1,numero_usuario,0),font=("fixedsys", 20), fg="white", bg="black")
         boton3.place(x=325, y=310)
         #Botón para salir del juego
         boton4 = Button(text="Salir del juego", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
@@ -664,7 +664,7 @@ class Menú2:
                         fg="white", bg="black")
         boton3.place(x=190, y=230)
         # Botón para iniciar partida
-        boton4 = Button(text="Iniciar partida", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton4 = Button(text="Iniciar partida", command=lambda :IniciarPartida(2,numero_usuario,id2.get_valor()), font=("fixedsys", 20), fg="white", bg="black")
         boton4.place(x=325, y=290)
         # Botón para salir del juego
         boton5 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
@@ -685,12 +685,27 @@ class Menú2:
                         fg="white", bg="black")
         boton8.place(x=990, y=230)
         # Botón para iniciar partida para jugador 2
-        boton9 = Button(text="Iniciar partida", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton9 = Button(text="Iniciar partida", command=lambda :IniciarPartida(2,numero_usuario,id2.get_valor()), font=("fixedsys", 20), fg="white", bg="black")
         boton9.place(x=1125, y=290)
         # Botón para salir del juego para jugador 2
         boton10 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
         boton10.place(x=1125, y=350)
         ventana10.mainloop()
+
+class IniciarPartida:
+    def __init__(self,modo,id1,id2):
+        if modo == 1:
+            print("Partida iniciada con una persona")
+        else:
+            with open(nombre_archivo, 'r', newline='') as archivo_csv:
+                lector_csv = csv.reader(archivo_csv)
+                for fila in lector_csv:
+                    if int(fila[7]) == id1:
+                        jugador1 = fila[0]
+                    elif int(fila[7]) == id2:
+                        jugador2 = fila[0]
+            jugador_inicial = random.choice([jugador1,jugador2])
+            print("El jugador " + jugador_inicial + " iniciará la partida")
 inicio = Inicio()
 inicio.InicioSesion()
 #Menú2()
