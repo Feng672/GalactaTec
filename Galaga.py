@@ -61,21 +61,21 @@ class Player (pygame.sprite.Sprite):     # Clase del jugador
 class Meteoro (pygame.sprite.Sprite):
     def __init__(self):    # Inicio de clase
         super(). __init__()
-        self.image = random.choice (meteor_images)    # Imagen del meteoro
+        self.image = random.choice (meteor_images)    # Imagen del enemigo
         self.image.set_colorkey(Black)    # Renueve el fondo negro de la imagen del jugador
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange (WIDTH - self.rect.width)     # Lugar al azar del meteoro.
-        self.rect.y = random.randrange (-140, -100)     # Lugar al azar del meteoro.
+        self.rect.x = random.randrange (WIDTH - self.rect.width)     # Lugar al azar del enemigo.
+        self.rect.y = random.randrange (-140, -100)    
         self.speedy = random.randrange (1, 10)   # Velocidad de caida
-        self.speedx = random.randrange (-5, 5) # Aleacion de meteoros
+        self.speedx = random.randrange (-5, 5) # Aleacion de enemigos
 
 
     def update (self):
         self.rect.y += self.speedy
         self.rect.x += self.speedx
         if self.rect.top > HEIGHT + 10 or self.rect.left < -40 or self.rect.right > WIDTH + 40: # si ya rebaso el alto de la ventana
-            self.rect.x = random.randrange (WIDTH - self.rect.width)     # Lugar al azar del meteoro.
-            self.rect.y = random.randrange (-100, -40)     # Lugar al azar del meteoro.
+            self.rect.x = random.randrange (WIDTH - self.rect.width)     
+            self.rect.y = random.randrange (-100, -40)     
             self.speedy = random.randrange (1, 10)   # Velocidad de caida
 
 class Bullet (pygame.sprite.Sprite):
@@ -133,11 +133,9 @@ def show_go_screen (): #Funcion de pantalla de game over
 
 
 meteor_images = []  # lista para imagenes aleatoria
-meteor_list = ["assets/meteorGrey_big1.png", "assets/meteorGrey_big2.png", "assets/meteorGrey_big3.png", "assets/meteorGrey_big4.png",
-				"assets/meteorGrey_med1.png", "assets/meteorGrey_med2.png", "assets/meteorGrey_small1.png", "assets/meteorGrey_small2.png",
-				"assets/meteorGrey_tiny1.png", "assets/meteorGrey_tiny2.png"]
+meteor_list = ["assets/A1.png"]
 for img in meteor_list: #iteracion de imagenes
-    meteor_images.append (pygame.image.load(img).convert())
+    meteor_images.append (pygame.image.load(img).convert()_alpha)
 
 
 #Explociones de meteoritos:
