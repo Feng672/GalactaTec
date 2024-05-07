@@ -404,6 +404,9 @@ class Menú:
     def ConfiPartida(self):
         ventana7.destroy()
         ConfiguracionDeLaPartida(1)
+    def mostrar_ayuda(self):
+        ventana7.destroy()
+        VentanaAyuda(1)
     def __init__(self):
         global ventana7
         ventana7 = Tk()
@@ -411,22 +414,25 @@ class Menú:
         ventana7.geometry("900x500")
         #Botón para editar configuaciones
         boton = Button(text = "Editar configuración del usuario", command = self.Datos,font=("fixedsys", 20), fg="white", bg="black")
-        boton.place(x = 200, y = 70)
+        boton.place(x = 200, y = 50)
         # Botón para ver salón de la fama
         boton = Button(text="Salón de la fama", command=self.salón,font=("fixedsys", 20), fg="white", bg="black")
-        boton.place(x=320, y=130)
+        boton.place(x=320, y=110)
         #Botón para editar configuración de la partida
         boton2 = Button(text="Editar configuración de la partida", command=self.ConfiPartida,font=("fixedsys", 20), fg="white", bg="black")
-        boton2.place(x=190, y=190)
+        boton2.place(x=190, y=170)
         # Botón para iniciar jugador 2
         boton = Button(text="Iniciar jugador 2", command=self.IniciarJugador2,font=("fixedsys", 20), fg="white", bg="black")
-        boton.place(x=310, y=250)
+        boton.place(x=310, y=230)
         #Botón para iniciar partida
         boton3 = Button(text="Iniciar partida", command=lambda:IniciarPartida(1,numero_usuario,0),font=("fixedsys", 20), fg="white", bg="black")
-        boton3.place(x=325, y=310)
+        boton3.place(x=325, y=290)
+        #Botón para acceder a la ayuda del juego
+        boton5 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
+        boton5.place(x=400, y=350)
         #Botón para salir del juego
         boton4 = Button(text="Salir del juego", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
-        boton4.place(x=325, y=370)
+        boton4.place(x=325, y=410)
         ventana7.mainloop()
 
 class Datos:
@@ -680,6 +686,9 @@ class Menú2:
     def ConfiPartida(self):
         ventana10.destroy()
         ConfiguracionDeLaPartida(2)
+    def mostrar_ayuda(self):
+        ventana10.destroy()
+        VentanaAyuda(2)
     def __init__(self):
         global ventana10
         ventana10 = Tk()
@@ -702,30 +711,36 @@ class Menú2:
         # Botón para iniciar partida
         boton4 = Button(text="Iniciar partida", command=lambda :IniciarPartida(2,numero_usuario,id2.get_valor()), font=("fixedsys", 20), fg="white", bg="black")
         boton4.place(x=325, y=290)
+        #Botón para acceder a la ayuda del juego
+        boton5 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
+        boton5.place(x=400, y=350)
         # Botón para salir del juego
-        boton5 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
-        boton5.place(x=325, y=350)
+        boton6 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton6.place(x=325, y=410)
 
         # Etiqueta que indica que los botones son del jugador 2
         label2 = Label(ventana10, text="Jugador 2", font=("fixedsys", 20), fg="white", bg="black")
         label2.place(x=1190, y=50)
         # Botón para editar configuaciones para jugador 2
-        boton6 = Button(text="Editar configuración del usuario", command=lambda :self.Datos(id2.get_valor()), font=("fixedsys", 20), fg="white",
+        boton7 = Button(text="Editar configuración del usuario", command=lambda :self.Datos(id2.get_valor()), font=("fixedsys", 20), fg="white",
                        bg="black")
-        boton6.place(x=1000, y=110)
+        boton7.place(x=1000, y=110)
         # Botón para ver salón de la fama para jugador 2
-        boton7 = Button(text="Salón de la fama", command=self.salón, font=("fixedsys", 20), fg="white", bg="black")
-        boton7.place(x=1120, y=170)
+        boton8 = Button(text="Salón de la fama", command=self.salón, font=("fixedsys", 20), fg="white", bg="black")
+        boton8.place(x=1120, y=170)
         # Botón para editar configuración de la partida para jugador 2
-        boton8 = Button(text="Editar configuración de la partida", command= self.ConfiPartida, font=("fixedsys", 20),
+        boton9 = Button(text="Editar configuración de la partida", command= self.ConfiPartida, font=("fixedsys", 20),
                         fg="white", bg="black")
-        boton8.place(x=990, y=230)
+        boton9.place(x=990, y=230)
         # Botón para iniciar partida para jugador 2
-        boton9 = Button(text="Iniciar partida", command=lambda :IniciarPartida(2,numero_usuario,id2.get_valor()), font=("fixedsys", 20), fg="white", bg="black")
-        boton9.place(x=1125, y=290)
+        boton10 = Button(text="Iniciar partida", command=lambda :IniciarPartida(2,numero_usuario,id2.get_valor()), font=("fixedsys", 20), fg="white", bg="black")
+        boton10.place(x=1125, y=290)
+        #Botón para acceder a la ayuda del juego
+        boton11 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
+        boton11.place(x=1200, y=350)
         # Botón para salir del juego para jugador 2
-        boton10 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
-        boton10.place(x=1125, y=350)
+        boton12 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
+        boton12.place(x=1125, y=410)
         ventana10.mainloop()
 
 class IniciarPartida:
@@ -1008,6 +1023,73 @@ class ConfiguracionDeLaPartida:
         menu_desplegable3.config(font=("fixedsys", 20), background="black", foreground="black", width=10, state="readonly")
         menu_desplegable3.place(x=700, y=150)
         ventana12.mainloop()
+
+class VentanaAyuda:
+    def __init__(self, modo):
+        self.modo = modo
+        self.ventana13 = Tk()
+        self.ventana13.configure(bg="black")
+        self.ventana13.title("Ayuda del Videojuego")
+        self.ventana13.geometry("800x600")
+
+        # Contenido de la ventana de ayuda
+        label = Label(self.ventana13, text="El videojuego se basa en derrotar las naves enemigas que aparecen en la interfaz",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=(15, 5), anchor="n")
+
+        label = Label(self.ventana13, text="Controles:",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=5, anchor="n")
+
+        label = Label(self.ventana13, text="Para los controles de la nave se puede mover con las teclas del teclado o el joystick",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=(5, 5), anchor="n")
+
+        label = Label(self.ventana13, text="Con el joystick es igual que con las teclas, el botón de disparo es el espacio igual",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=5, anchor="n")
+
+        label = Label(self.ventana13, text="Mover arriba: ↑ ",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=(5, 5), anchor="n")
+        
+        label = Label(self.ventana13, text="Mover abajo: ↓ ",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=5, anchor="n")
+
+        label = Label(self.ventana13, text="Mover izquierda: ← ",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=(5, 5), anchor="n")
+
+        label = Label(self.ventana13, text="Mover derecha: → ",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=5, anchor="n")
+
+        label = Label(self.ventana13, text="Disparar: Espacio __",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=(5, 5), anchor="n")
+
+        label = Label(self.ventana13, text="Power-ups: Existen 5 bonos",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=5, anchor="n")
+
+        label = Label(self.ventana13, text="Bono Disparo Expansivo: Para destruir más de una nave a la vez",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=(5, 5), anchor="n")
+
+        label = Label(self.ventana13, text="Bono Disparo Perseguidor: Para destruir una nave enemiga sin disparar donde se encuentra",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=5, anchor="n")
+
+        label = Label(self.ventana13, text="Bono Puntos Dobles: Los puntos al destruir naves se multiplican por 2 durante 15 seg",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=(5, 5), anchor="n")
+
+        label = Label(self.ventana13, text="Bono Escudo: Se formará un escudeo de 3 niveles para la protección",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=5, anchor="n")
+
+        label = Label(self.ventana13, text="Bono Vida Extra: Se le otorgará una vida de más al jugador",  font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=(5, 5), anchor="n")
+
+        # Botón para cerrar la ventana de ayuda
+        boton_cerrar = Button(self.ventana13, text="Cerrar", command=self.cerrar_ventana, font=("fixedsys", 20), fg="white", bg="black")
+        boton_cerrar.pack(side="top", pady=20)
+
+        self.ventana13.mainloop()
+
+    def cerrar_ventana(self):
+        self.ventana13.destroy()
+        if self.modo == 1:
+            Menú()
+        else:
+            Menú2()
 
 #ConfiguracionDeLaPartida()
 inicio = Inicio()
