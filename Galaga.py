@@ -40,17 +40,37 @@ class Player (pygame.sprite.Sprite):     # Clase del jugador
         self.shield = 100
 
     def update (self):   # Movimiento de nave 
-        self.speed_x = 0 # Velocidad 
-        keystate = pygame.key.get_pressed()   # Verifica si alguna tecla es precionada 
+        self.speed_x = 0 # Velocidad y posicion en x
+        self.speed_y = 0 # Velocidad  posicion en y 
+        keystate = pygame.key.get_pressed()   # Verifica si alguna tecla es precionada
+
+        # Movimiento Horizontal 
+        if keystate [pygame.K_UP]:  # si se preciona la techa arriba
+            self.speed_y = -5           # moverse hacia arriba 
+        if keystate [pygame.K_DOWN]:    #Si se preciona la techa abajo 
+            self.speed_y = 5                #moverse hacia abajo 
+
+        #Movimiento vertical 
         if keystate [pygame.K_LEFT]:   # Si se pulso la izquierda.  
             self.speed_x = -5     # Se muevo a la izquierda.
         if keystate [pygame.K_RIGHT]: # Si se pulso la derecha. 
             self.speed_x = 5     # Se muevo a la derecha
-        self.rect.x += self.speed_x 
+            
+        self.rect.x += self.speed_x
+        self.rect.y += self.speed_y
+
+        # Limite de pantalla en la parte horizontal 
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
+
+        #Limite de pantalla en la parte vertical 
         if self.rect.right > WIDTH : # Para que la nave no se salga de la pantalla 
             self.rect.right = WIDTH
         if self.rect.left < 0 : # Para que la nave no se salga de la pantalla
             self.rect.left = 0
+    
 
     def shoot (self):
         bullet = Bullet (self.rect.centerx,self.rect.top) #Crear una bala
@@ -116,20 +136,20 @@ class Explosion(pygame.sprite.Sprite): #clase de explociones aleatorias
                 self.rect = self.image.get_rect ()
                 self.rect.center = center 
 
-def show_go_screen (): #Funcion de pantalla de game over
-    screen.blit(background, [0,0])  # pone la imagen backgroun en la seccion de inicio
-    draw_text(screen, "GALAGA", 65, WIDTH // 2, HEIGHT // 4 )
-    draw_text(screen, "Instrucciones", 27, WIDTH //2, HEIGHT // 2)
-    draw_text(screen, "Press key for start", 20, WIDTH //2, HEIGHT *3/4)
-    pygame. display.flip()  # Mostrar en pantalla
-    waiting = True
-    while waiting:
-        Clock.tick (60)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.KEYUP:
-                waiting = False 
+    def show_go_screen (): #Funcion de pantalla de game over
+        screen.blit(background, [0,0])  # pone la imagen backgroun en la seccion de inicio
+        draw_text(screen, "GALAGA", 65, WIDTH // 2, HEIGHT // 4 )
+        draw_text(screen, "Instrucciones", 27, WIDTH //2, HEIGHT // 2)
+        draw_text(screen, "Press key for start", 20, WIDTH //2, HEIGHT *3/4)
+        pygame. display.flip()  # Mostrar en pantalla
+        waiting = True
+        while waiting:
+            Clock.tick (60)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYUP:
+                    waiting = False 
 
 
 meteor_images = []  # lista para imagenes aleatoria
