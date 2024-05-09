@@ -155,7 +155,7 @@ class Explosion(pygame.sprite.Sprite): #clase de explociones aleatorias
 meteor_images = []  # lista para imagenes aleatoria
 meteor_list = ["assets/A1.png"]
 for img in meteor_list: #iteracion de imagenes
-    meteor_images.append (pygame.image.load(img).convert()_alpha)
+    meteor_images.append (pygame.image.load(img).convert_alpha())
 
 
 #Explociones de meteoritos:
