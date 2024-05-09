@@ -136,26 +136,26 @@ class Explosion(pygame.sprite.Sprite): #clase de explociones aleatorias
                 self.rect = self.image.get_rect ()
                 self.rect.center = center 
 
-    def show_go_screen (): #Funcion de pantalla de game over
-        screen.blit(background, [0,0])  # pone la imagen backgroun en la seccion de inicio
-        draw_text(screen, "GALAGA", 65, WIDTH // 2, HEIGHT // 4 )
-        draw_text(screen, "Instrucciones", 27, WIDTH //2, HEIGHT // 2)
-        draw_text(screen, "Press key for start", 20, WIDTH //2, HEIGHT *3/4)
-        pygame. display.flip()  # Mostrar en pantalla
-        waiting = True
-        while waiting:
-            Clock.tick (60)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                if event.type == pygame.KEYUP:
-                    waiting = False 
+def show_go_screen(): #Funcion de pantalla de game over
+    screen.blit(background, [0,0])  # pone la imagen backgroun en la seccion de inicio
+    draw_text(screen, "GALAGA", 65, WIDTH // 2, HEIGHT // 4 )
+    draw_text(screen, "Instrucciones", 27, WIDTH //2, HEIGHT // 2)
+    draw_text(screen, "Press key for start", 20, WIDTH //2, HEIGHT *3/4)
+    pygame. display.flip()  # Mostrar en pantalla
+    waiting = True
+    while waiting:
+        Clock.tick (60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                waiting = False
 
 
 meteor_images = []  # lista para imagenes aleatoria
 meteor_list = ["assets/A1.png"]
 for img in meteor_list: #iteracion de imagenes
-    meteor_images.append (pygame.image.load(img).convert()_alpha)
+    meteor_images.append (pygame.image.load(img).convert_alpha())
 
 
 #Explociones de meteoritos:
@@ -165,67 +165,67 @@ for i in range (9):  #Bucle de imagenes
     img = pygame.image.load(file).convert()
     img.set_colorkey(Black)
     img_scale = pygame.transform.scale (img, (70,70))
-    explosion_anim.append (img_scale)  #cargado de imagenes 
+    explosion_anim.append (img_scale)  #cargado de imagenes
             
-# Cargar imagen de fondo 
+# Cargar imagen de fondo
 background = pygame.image.load ("assets/background.png").convert()
 
 #Cargar sonidos
-laser_sound = pygame.mixer.Sound("assets/laser5.ogg") # Sonido laser 
-explosion_sound = pygame.mixer.Sound("assets/explosion.wav") #sonido explosion 
+laser_sound = pygame.mixer.Sound("assets/laser5.ogg") # Sonido laser
+explosion_sound = pygame.mixer.Sound("assets/explosion.wav") #sonido explosion
 pygame.mixer.music.load("assets/Cant Stop.mp3")  #sonido de fondo
-pygame.mixer.music.set_volume(100)  #Volumen de musica 
+pygame.mixer.music.set_volume(100)  #Volumen de musica
         
 
 pygame.mixer.music.play(loops =-1) # Musica infinita
-game_over = True # fin del juego 
+game_over = True # fin del juego
 
 
-running = True 
+running = True
 while running:
     if game_over:
-        show_go_screen()  #funcion de main 
+        show_go_screen()  #funcion de main
         game_over = False
         all_sprites = pygame.sprite.Group()
         meteoro_lista = pygame.sprite.Group() # Grupo de almacenamiento de meteoros
         bullets = pygame.sprite.Group()
 
-        player = Player()   # Nombre del jugador 
+        player = Player()   # Nombre del jugador
         all_sprites.add(player)  # Añade al jugador a la lista.
         for i in range (8):
             meteoro = Meteoro ()
             all_sprites.add (meteoro)
             meteoro_lista.add(meteoro)
-        score =  0  # Marcador 
+        score =  0  # Marcador
    
     Clock.tick(60)
-    for event in pygame.event.get(): 
-        if event.type == pygame.QUIT: 
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:  # tecla de barra espaciadora
-                player.shoot ()  # cada que se presione, dispare 
+                player.shoot ()  # cada que se presione, dispare
         
 
     all_sprites.update()
 
     # Colisiones meteoro - laser
     hits = pygame.sprite.groupcollide(meteoro_lista, bullets, True, True)
-    for hit in hits:  # Realiza que una vez el meteoro sea eliminado, reaparezca de nuevo. 
+    for hit in hits:  # Realiza que una vez el meteoro sea eliminado, reaparezca de nuevo.
         score += 10 # Hace que el score aumente de 10 en 10
-        explosion = Explosion(hit.rect.center) #Agrego de explosion al colicionar 
+        explosion = Explosion(hit.rect.center) #Agrego de explosion al colicionar
         all_sprites.add(explosion)
         explosion_sound.play()
-        meteoro = Meteoro ()     
+        meteoro = Meteoro ()
         all_sprites.add (meteoro)
-        meteoro_lista.add(meteoro) 
+        meteoro_lista.add(meteoro)
 
     # Colisiones jugador - meteoro
     hits = pygame.sprite.spritecollide (player, meteoro_lista, True) # True = los objetos que colisionen desaparecen.
     for hit in hits:  #Verifica si algo dentro de esta lista colisiona
-        player.shield -= 25  # Cada una colision -25 pts de vida 
-        if player.shield <= 0:   # si la vida es 0, termina el juego 
-            game_over = True 
+        player.shield -= 25  # Cada una colision -25 pts de vida
+        if player.shield <= 0:   # si la vida es 0, termina el juego
+            game_over = True
 
     
     screen.blit(background, [0,0]) # Inpresion de background en la pantalla principal
@@ -236,7 +236,7 @@ while running:
     draw_text (screen, str(score), 25, WIDTH // 2,10)
 
     #Escudo
-    draw_shield_bar(screen, 5, 5, player.shield)  # Barra de vida 
+    draw_shield_bar(screen, 5, 5, player.shield)  # Barra de vida
     
     pygame.display.flip()
 pygame.quit()
