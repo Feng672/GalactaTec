@@ -36,41 +36,40 @@ class Player (pygame.sprite.Sprite):     # Clase del jugador
         self.rect = self.image.get_rect()  # Centrara la imagen del jugador 
         self.rect.centerx = WIDTH // 2   #Lugar de centrado de imagen 
         self.rect.bottom = HEIGHT - 10 
-        self.speed = 0  # Velocidad de movimiento
+        self.speed = 5  # Velocidad de movimiento
         self.shield = 100
 
-    def update (self):   # Movimiento de nave 
-        self.speed_x = 0 # Velocidad y posicion en x
-        self.speed_y = 0 # Velocidad  posicion en y 
+    def update (self):   # Movimiento de nave
         keystate = pygame.key.get_pressed()   # Verifica si alguna tecla es precionada
 
-        # Movimiento Horizontal 
-        if keystate [pygame.K_UP]:  # si se preciona la techa arriba
-            self.speed_y = -5           # moverse hacia arriba 
-        if keystate [pygame.K_DOWN]:    #Si se preciona la techa abajo 
-            self.speed_y = 5                #moverse hacia abajo 
+        # Movimiento Horizontal
+        if keystate [pygame.K_LEFT]:    # Si se preciona la flecha izquierda
+            self.rect.x -= self.speed   # Moverse hacia la izquierda
+            move_sound.play()
+        if keystate [pygame.K_RIGHT]:   # Si se preciona la flecha derecha
+            self.rect.x += self.speed   # Moverse hacia la derecha
+            move_sound.play()
 
-        #Movimiento vertical 
-        if keystate [pygame.K_LEFT]:   # Si se pulso la izquierda.  
-            self.speed_x = -5     # Se muevo a la izquierda.
-        if keystate [pygame.K_RIGHT]: # Si se pulso la derecha. 
-            self.speed_x = 5     # Se muevo a la derecha
-            
-        self.rect.x += self.speed_x
-        self.rect.y += self.speed_y
+        #Movimiento Vertical
+        if keystate [pygame.K_UP]:      # Si se preciona la flecha arriba
+            self.rect.y -= self.speed   # Moverse hacia arriba
+            move_sound.play()
+        if keystate [pygame.K_DOWN]:    # Si se preciona la flecha abajo
+            self.rect.y += self.speed   # Moverse hacia abajo
+            move_sound.play()
 
-        # Limite de pantalla en la parte horizontal 
+        # Limite de pantalla en la parte horizontal
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
 
-        #Limite de pantalla en la parte vertical 
-        if self.rect.right > WIDTH : # Para que la nave no se salga de la pantalla 
+        #Limite de pantalla en la parte vertical
+        if self.rect.right > WIDTH :
             self.rect.right = WIDTH
-        if self.rect.left < 0 : # Para que la nave no se salga de la pantalla
+        if self.rect.left < 0 :
             self.rect.left = 0
-    
+
 
     def shoot (self):
         bullet = Bullet (self.rect.centerx,self.rect.top) #Crear una bala
@@ -172,6 +171,7 @@ background = pygame.image.load ("assets/background.png").convert()
 
 #Cargar sonidos
 laser_sound = pygame.mixer.Sound("assets/laser5.ogg") # Sonido laser
+move_sound = pygame.mixer.Sound("assets/move.wav") # Sonido movimiento
 explosion_sound = pygame.mixer.Sound("assets/explosion.wav") #sonido explosion
 pygame.mixer.music.load("assets/Cant Stop.mp3")  #sonido de fondo
 pygame.mixer.music.set_volume(100)  #Volumen de musica
