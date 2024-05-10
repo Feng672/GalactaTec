@@ -182,6 +182,11 @@ class Inicio:
     def Ventana_registro(self):
         ventana.destroy()
         registro()
+        
+    def mostrar_ayuda(self):
+        ventana.destroy()
+        VentanaAyuda(5)
+        
     def InicioSesion(self):
         self.timer = None
         self.codigo = None
@@ -210,6 +215,9 @@ class Inicio:
         #Botón para recuperar contraseña
         boton3 = Button(text="Recuperar contraseña", command=self.RecuperarContra,font=("fixedsys", 20), fg="white", bg="black")
         boton3.place(x=285, y=270)
+        #Boton de ayuda
+        boton3 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
+        boton3.place(x=10, y=10)
         ventana.mainloop()
 #[0]usuario
 #[1]nombre
@@ -429,10 +437,10 @@ class Menú:
         boton3.place(x=325, y=290)
         #Botón para acceder a la ayuda del juego
         boton5 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
-        boton5.place(x=400, y=350)
+        boton5.place(x=10, y=10)
         #Botón para salir del juego
         boton4 = Button(text="Salir del juego", command=self.Presionó,font=("fixedsys", 20), fg="white", bg="black")
-        boton4.place(x=325, y=410)
+        boton4.place(x=325, y=350)
         ventana7.mainloop()
 
 class Datos:
@@ -620,6 +628,9 @@ class JugadorDos:
         self.valor = nuevo_valor
 
 class inicio2:
+    def mostrar_ayuda(self):
+        ventana9.destroy()
+        VentanaAyuda(6)
     def __init__(self):
         global ventana9
         ventana9 = Tk()
@@ -638,6 +649,9 @@ class inicio2:
         # Botón para iniciar sesión
         boton2 = Button(text="Iniciar sesión", command=lambda: self.InicioDeSesion2(caja.get(), caja2.get(), nombre_archivo), font=("fixedsys", 20), fg="white", bg="black")
         boton2.place(x=330, y=210)
+        #Boton de ayuda
+        boton3 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
+        boton3.place(x=10, y=10)
         ventana9.mainloop()
     def InicioDeSesion2(self, usuario, contraseña, archivo):
         global id2
@@ -713,10 +727,10 @@ class Menú2:
         boton4.place(x=325, y=290)
         #Botón para acceder a la ayuda del juego
         boton5 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
-        boton5.place(x=400, y=350)
+        boton5.place(x=10, y=10)
         # Botón para salir del juego
         boton6 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
-        boton6.place(x=325, y=410)
+        boton6.place(x=325, y=350)
 
         # Etiqueta que indica que los botones son del jugador 2
         label2 = Label(ventana10, text="Jugador 2", font=("fixedsys", 20), fg="white", bg="black")
@@ -737,10 +751,10 @@ class Menú2:
         boton10.place(x=1125, y=290)
         #Botón para acceder a la ayuda del juego
         boton11 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
-        boton11.place(x=1200, y=350)
+        boton11.place(x=850, y=10)
         # Botón para salir del juego para jugador 2
         boton12 = Button(text="Salir del juego", command=self.Presionó, font=("fixedsys", 20), fg="white", bg="black")
-        boton12.place(x=1125, y=410)
+        boton12.place(x=1125, y=350)
         ventana10.mainloop()
 
 class IniciarPartida:
@@ -872,11 +886,15 @@ class SalonDeLaFama:
         else:
             Menú2()
 
+    def mostrar_ayuda(self):
+        ventana11.destroy()
+        VentanaAyuda(3)
+
     def __init__(self, top5, modo):
         self.Iniciar_Variables(top5)
         global ventana11
         ventana11 = Tk()
-        ventana11.geometry("900x800")
+        ventana11.geometry("900x700")
         ventana11.configure(bg="black")
         label = Label(ventana11, text="Primer lugar",font=("fixedsys", 20), fg="white", bg="black")
         label.place(x = 50, y = 100)
@@ -896,7 +914,10 @@ class SalonDeLaFama:
         label18.place(x=700, y=25)
         nuevo_tamaño = (80, 80)
         boton = Button(text="Regresar", command=lambda :self.Regresar(modo), font=("fixedsys", 20), fg="white", bg="black")
-        boton.place(x= 375, y= 700)
+        boton.place(x= 375, y= 600)
+        #Boton de ayuda
+        boton2 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
+        boton2.place(x=10, y=650)
         imagen14 = Image.open("Campeón.png")
         imagen15 = imagen14.resize(nuevo_tamaño)
         imagen16 = ImageTk.PhotoImage(imagen15)
@@ -988,6 +1009,11 @@ class ConfiguracionDeLaPartida:
             Menú()
         else:
             Menú2()
+            
+    def mostrar_ayuda(self):
+        ventana12.destroy()
+        VentanaAyuda(4)
+        
     def __init__(self,modo):
         global ventana12
         global opcion
@@ -1022,6 +1048,9 @@ class ConfiguracionDeLaPartida:
         menu_desplegable3.pack()
         menu_desplegable3.config(font=("fixedsys", 20), background="black", foreground="black", width=10, state="readonly")
         menu_desplegable3.place(x=700, y=150)
+        #Boton de ayuda
+        boton = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
+        boton.place(x=10, y=10)
         ventana12.mainloop()
 
 class VentanaAyuda:
@@ -1072,7 +1101,7 @@ class VentanaAyuda:
         label = Label(self.ventana13, text="Bono Puntos Dobles: Los puntos al destruir naves se multiplican por 2 durante 15 seg",  font=("fixedsys", 15), fg="white", bg="black")
         label.pack(pady=(5, 5), anchor="n")
 
-        label = Label(self.ventana13, text="Bono Escudo: Se formará un escudeo de 3 niveles para la protección",  font=("fixedsys", 15), fg="white", bg="black")
+        label = Label(self.ventana13, text="Bono Escudo: Se formará un escudo de 3 niveles para la protección",  font=("fixedsys", 15), fg="white", bg="black")
         label.pack(pady=5, anchor="n")
 
         label = Label(self.ventana13, text="Bono Vida Extra: Se le otorgará una vida de más al jugador",  font=("fixedsys", 15), fg="white", bg="black")
@@ -1088,9 +1117,18 @@ class VentanaAyuda:
         self.ventana13.destroy()
         if self.modo == 1:
             Menú()
-        else:
+        elif self.modo == 2:
             Menú2()
+        elif self.modo == 3:
+            SalonDeLaFama([], 1)
+        elif self.modo == 4:
+            ConfiguracionDeLaPartida(1)
+        elif self.modo == 5:
+            Inicio()
+        elif self.modo == 6:
+            inicio2()
 
+            
 #ConfiguracionDeLaPartida()
 inicio = Inicio()
 inicio.InicioSesion()
