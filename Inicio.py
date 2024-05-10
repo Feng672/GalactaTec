@@ -886,9 +886,12 @@ class SalonDeLaFama:
         else:
             Menú2()
 
-    def mostrar_ayuda(self):
+    def mostrar_ayuda(self, modo):
         ventana11.destroy()
-        VentanaAyuda(3)
+        if modo == 1:
+            VentanaAyuda(3)
+        else:
+            VentanaAyuda(7)
 
     def __init__(self, top5, modo):
         self.Iniciar_Variables(top5)
@@ -916,7 +919,7 @@ class SalonDeLaFama:
         boton = Button(text="Regresar", command=lambda :self.Regresar(modo), font=("fixedsys", 20), fg="white", bg="black")
         boton.place(x= 375, y= 600)
         #Boton de ayuda
-        boton2 = Button(text="Ayuda", command=self.mostrar_ayuda,font=("fixedsys", 20), fg="white", bg="black")
+        boton2 = Button(text="Ayuda", command=lambda: self.mostrar_ayuda(modo),font=("fixedsys", 20), fg="white", bg="black")
         boton2.place(x=10, y=650)
         imagen14 = Image.open("Campeón.png")
         imagen15 = imagen14.resize(nuevo_tamaño)
@@ -1120,13 +1123,16 @@ class VentanaAyuda:
         elif self.modo == 2:
             Menú2()
         elif self.modo == 3:
-            SalonDeLaFama([], 1)
+            SalonDeLaFama(primeros_cinco, 1)
         elif self.modo == 4:
             ConfiguracionDeLaPartida(1)
         elif self.modo == 5:
-            Inicio()
+            inicio = Inicio()
+            inicio.InicioSesion()
         elif self.modo == 6:
             inicio2()
+        elif self.modo == 7:
+            SalonDeLaFama(primeros_cinco, 2)
 
             
 #ConfiguracionDeLaPartida()
