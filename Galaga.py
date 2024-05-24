@@ -19,14 +19,23 @@ def draw_text (surface,text, size, x, y): #Funcion hace que pueda dibunar letras
     text_rect.midtop = (x,y)
     surface.blit(text_surface, text_rect) # donde pintar  
 
-def draw_shield_bar(surface, x, y, porcentaje): # Funcion de barra de vida
-    BAR_LENGHT = 100 #Largo de barra
-    BAR_HEIGHT = 10
-    fill = (porcentaje / 100)* BAR_LENGHT #Calculo de % de barra 
-    border = pygame.Rect(x,y,BAR_LENGHT, BAR_HEIGHT)
-    fill = pygame.Rect(x,y,fill,BAR_HEIGHT)
-    pygame.draw.rect(surface, Green,fill)  #color de barra
-    pygame.draw.rect (surface, White,border, 2)
+def draw_shield_bar(surface, x, y, porcentaje): # Funcion de barra de vida con corazones
+    heart_width = heart_image.get_width()
+    heart_height = heart_image.get_height()
+    num_hearts = 5 # Número de corazones a mostrar
+
+    # Calcula el número de corazones llenos
+    full_hearts = int((porcentaje / 100) * num_hearts)
+
+    for i in range(num_hearts):
+        if i < full_hearts:
+            # Dibuja un corazón lleno
+            surface.blit(heart_image, (x + i * (heart_width + 5), y))
+        else:
+            # Dibuja un corazón vacío 
+            surface.blit(empty_heart_image, (x + i * (heart_width + 5), y))
+            
+
     
 class Player (pygame.sprite.Sprite):     # Clase del jugador 
     def __init__(self): 
@@ -176,6 +185,11 @@ explosion_sound = pygame.mixer.Sound("assets/explosion.wav") #sonido explosion
 pygame.mixer.music.load("assets/Cant Stop.mp3")  #sonido de fondo
 pygame.mixer.music.set_volume(100)  #Volumen de musica
         
+# Cargar imagen de corazones
+heart_image = pygame.image.load("assets/heart.png").convert_alpha()
+heart_image = pygame.transform.scale(heart_image, (30, 30))
+empty_heart_image = pygame.image.load("assets/empty_heart.png").convert_alpha()
+empty_heart_image = pygame.transform.scale(empty_heart_image, (30, 30))
 
 pygame.mixer.music.play(loops =-1) # Musica infinita
 game_over = True # fin del juego
@@ -236,7 +250,7 @@ while running:
     draw_text (screen, str(score), 25, WIDTH // 2,10)
 
     #Escudo
-    draw_shield_bar(screen, 5, 5, player.shield)  # Barra de vida
+    draw_shield_bar(screen, 5, HEIGHT - 40, player.shield)  # Barra de vida
     
     pygame.display.flip()
 pygame.quit()
