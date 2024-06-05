@@ -778,6 +778,9 @@ class IniciarPartida:
                         jugador2 = fila[0]
             jugador_inicial = random.choice([jugador1,jugador2])
             print("El jugador " + jugador_inicial + " iniciará la partida")
+            ventana10.destroy()
+            juego = Juego()
+            juego.iniciar_partida()
 
 # Clase observer para saber cuándo se modifica el archivo CSV
 class ObserverCSV:
@@ -1143,6 +1146,19 @@ class VentanaAyuda:
 
 class Juego:
     def iniciar_partida(self):
+        # Información de los jugadores
+        with open(nombre_archivo, 'r', newline='') as archivo_csv:
+            lector_csv = csv.reader(archivo_csv)
+            for fila in lector_csv:
+                if int(fila[7]) == numero_usuario:
+                    jugador1 = fila[0]
+                    print(jugador1)
+                elif int(fila[7]) == id2.get_valor():
+                    jugador2 = fila[0]
+                    print(jugador2)
+        global user1
+        global user2
+        user1, user2 = random.sample([jugador1, jugador2],2)
         # Dimensiones de la ventana
         monitor_info = get_monitors()[0]
         screen_width = monitor_info.width
@@ -1318,7 +1334,7 @@ class Juego:
                            WIDTH - 160, HEIGHT - 50)
 
             # información jugador 1
-            self.draw_text(screen, "Jugador 1", 25, 17, 12,
+            self.draw_text(screen, user1, 25, 17, 12,
                            color=YELLOW if current_player.player_number == player1.player_number else RED if player1.lives == 0 else WHITE,
                            left_align=True)
             self.draw_shield_bar(screen, 20, 35, player1.shield, player1.layers_shield)
@@ -1334,7 +1350,7 @@ class Juego:
             self.draw_text(screen, player1_text, 20, 110, 65)
 
             # información jugador 2
-            self.draw_text(screen, "Jugador 2", 25, WIDTH - 250, 12,
+            self.draw_text(screen, user2, 25, WIDTH - 250, 12,
                            color=YELLOW if current_player.player_number == player2.player_number else RED if player2.lives == 0 else WHITE,
                            left_align=True)
             self.draw_shield_bar(screen, WIDTH - 270, 35, player2.shield, player2.layers_shield)
@@ -1478,13 +1494,13 @@ class Juego:
 
         extra_texts = [
             {"text": "Los resultados fueron: ", "size": 30, "x": WIDTH // 2, "y": HEIGHT // 2 - 30},
-            {"text": f"- 1er lugar: Jugador {first_place.player_number}", "size": 27, "x": WIDTH // 2 + 25,
+            {"text": f"- 1er lugar: {self.user_place(first_place.player_number)}", "size": 27, "x": WIDTH // 2 + 25,
              "y": HEIGHT // 2 + 40},
             {"text": f"... {first_place.score} puntos.", "size": 20, "x": WIDTH // 2 - 20, "y": HEIGHT // 2 + 80,
              "left_align": True},
             {"text": f"... {first_place.lives} vidas.", "size": 20, "x": WIDTH // 2 - 20, "y": HEIGHT // 2 + 100,
              "left_align": True},
-            {"text": f"- 2do lugar: Jugador {second_place.player_number}", "size": 27, "x": WIDTH // 2 + 25,
+            {"text": f"- 2do lugar: {self.user_place(second_place.player_number)}", "size": 27, "x": WIDTH // 2 + 25,
              "y": HEIGHT // 2 + 120},
             {"text": f"... {second_place.score} puntos.", "size": 20, "x": WIDTH // 2 - 20, "y": HEIGHT // 2 + 160,
              "left_align": True},
@@ -1499,6 +1515,12 @@ class Juego:
 
         self.show_screen("GALAGA", "", None, extra_texts, images)
         self.famous_lobby_screen()
+    # Función para obtener el usuario del primer lugar y el segundo lugar
+    def user_place(self,num):
+        if num == 1:
+            return user1
+        else:
+            return user2
 
     # Función para mostrar la pantalla de cambio de nivel y permitir la selección de un patrón
     def level_change_screen(self, current_player):
@@ -1763,10 +1785,10 @@ class Juego:
         if player1.last_level and player2.last_level:
             if player1.score > player2.score:
                 player1.is_winner = True
-                return True, "Jugador 1", player1, player2
+                return True, user1, player1, player2
             elif player2.score > player1.score:
                 player2.is_winner = True
-                return True, "Jugador 2", player1, player2
+                return True, user2, player1, player2
             else:
                 player1.is_winner = True
                 player2.is_winner = True
@@ -1774,20 +1796,20 @@ class Juego:
         elif player1.lives == 0 and player2.lives == 0:
             if player1.score > player2.score:
                 player1.is_winner = True
-                return True, "Jugador 1", player1, player2
+                return True, user1, player1, player2
             elif player2.score > player1.score:
                 player2.is_winner = True
-                return True, "Jugador 2", player1, player2
+                return True, user2, player1, player2
             else:
                 player1.is_winner = True
                 player2.is_winner = True
                 return True, "Empate", player1, player2
         elif player1.lives == 0 and player2.last_level == True:
             player2.is_winner = True
-            return True, "Jugador 2", player1, player2
+            return True, user2, player1, player2
         elif player2.lives == 0 and player1.last_level == True:
             player1.is_winner = True
-            return True, "Jugador 1", player1, player2
+            return True, user1, player1, player2
         else:
             return False, None, player1, player2
 
