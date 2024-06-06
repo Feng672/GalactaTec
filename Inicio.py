@@ -1167,17 +1167,20 @@ class VentanaAyuda:
 class Juego:
     def iniciar_partida(self):
         # Información de los jugadores
+        global nave1
+        global nave2
         with open(nombre_archivo, 'r', newline='') as archivo_csv:
             lector_csv = csv.reader(archivo_csv)
             for fila in lector_csv:
                 if int(fila[7]) == numero_usuario:
                     jugador1 = fila[0]
+                    nave1 = fila[5]
 
-                    print(jugador1)
                 elif int(fila[7]) == id2.get_valor():
                     jugador2 = fila[0]
+                    nave2 = fila[5]
 
-                    print(jugador2)
+
         global user1
         global user2
         global fotoU1
@@ -1377,6 +1380,8 @@ class Juego:
 
             for i in range(player1.lives):
                 screen.blit(player1.icon_life, (80 + i * 25, 50))
+
+            # Vidas del jugador activo
             for i in range(current_player.lives):
                 screen.blit(current_player.icon_life, (80 + i * 25, 800))
             player1_text = f"Marcador: {player1.score}\nNivel: {player1.level.number}\nEnemigos Destruidos: {player1.cant_enemies_distroyed}"
@@ -1408,8 +1413,25 @@ class Juego:
             if game_over and winner:
                 self.end_screen(player1, player2)
                 need_reestart = True
-            pygame.display.flip()
 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_i:
+                        global volume
+                        volume = 0.5
+                        # Incrementar el volumen
+                        volume = min(volume + 0.1, 1.0)
+                        pygame.mixer.music.set_volume(volume)
+
+                    elif event.key == pygame.K_o:
+                        # Decrecmentar el volumen
+                        volume = max(volume - 0.1, 0.0)
+                        pygame.mixer.music.set_volume(volume)
+
+
+            pygame.display.flip()
         pygame.quit()
 
     def load_image(self, path, size=None):
@@ -1419,6 +1441,7 @@ class Juego:
         return image
 
     def load_sound(self, path):
+        global sound
         sound = pygame.mixer.Sound(path)
         return sound
 
@@ -1513,8 +1536,8 @@ class Juego:
     # Pantalla de final
     def end_screen(self, player1, player2):
         # Cargar imágenes de jugadores
-        player1_image = pygame.image.load("assets/player1_icon.png").convert_alpha()
-        player2_image = pygame.image.load("assets/player2_icon.png").convert_alpha()
+        player1_image = pygame.image.load(fotoU1).convert_alpha()
+        player2_image = pygame.image.load(fotoU2).convert_alpha()
 
         # Escalar imágenes
         player1_image = pygame.transform.scale(player1_image, (60, 60))
