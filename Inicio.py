@@ -772,23 +772,30 @@ class Menú2:
 class IniciarPartida:
     def __init__(self,modo,id1,id2):
         if modo == 1:
-            print("Partida iniciada con una persona")
-            ventana7.destroy()
-            juego = Juego()
-            juego.iniciar_partida()
+            print("Modo de juego para el futuro")
         else:
-            with open(nombre_archivo, 'r', newline='') as archivo_csv:
-                lector_csv = csv.reader(archivo_csv)
-                for fila in lector_csv:
-                    if int(fila[7]) == id1:
-                        jugador1 = fila[0]
-                    elif int(fila[7]) == id2:
-                        jugador2 = fila[0]
-            jugador_inicial = random.choice([jugador1,jugador2])
-            print("El jugador " + jugador_inicial + " iniciará la partida")
-            ventana10.destroy()
-            juego = Juego()
-            juego.iniciar_partida()
+            if opcion_seleccionada == None:
+                messagebox.showwarning(message="No has seleccionado un patrón de vuelo para el primer nivel", title="Error")
+            if opcion_seleccionada2 == None:
+                messagebox.showwarning(message="No has seleccionado un patrón de vuelo para el segundo nivel", title="Error")
+            if opcion_seleccionada3 == None:
+                messagebox.showwarning(message="No has seleccionado un patrón de vuelo para el tercer nivel", title="Error")
+            else:
+                print(opcion_seleccionada)
+                print(opcion_seleccionada2)
+                print(opcion_seleccionada3)
+                with open(nombre_archivo, 'r', newline='') as archivo_csv:
+                    lector_csv = csv.reader(archivo_csv)
+                    for fila in lector_csv:
+                        if int(fila[7]) == id1:
+                            jugador1 = fila[0]
+                        elif int(fila[7]) == id2:
+                            jugador2 = fila[0]
+                jugador_inicial = random.choice([jugador1, jugador2])
+                print("El jugador " + jugador_inicial + " iniciará la partida")
+                ventana10.destroy()
+                juego = Juego()
+                juego.iniciar_partida()
 
 # Clase observer para saber cuándo se modifica el archivo CSV
 class ObserverCSV:
@@ -1309,9 +1316,9 @@ class Juego:
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN:
+                    global volume
+                    volume = 0.5
                     if event.key == pygame.K_i:
-                        global volume
-                        volume = 0.5
                         # Incrementar el volumen
                         volume = min(volume + 0.1, 1.0)
                         pygame.mixer.music.set_volume(volume)
