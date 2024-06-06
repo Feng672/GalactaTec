@@ -404,7 +404,7 @@ class registro:
 
 class Menú:
     def Presionó(self):
-        print("presionó")
+        ventana7.destroy()
     def IniciarJugador2(self):
         ventana7.destroy()
         inicio2()
@@ -522,6 +522,11 @@ class Datos:
                 break
 
         self.escribir_datos_csv(datos, nombre_archivo)
+        ventana8.destroy()
+        if modo == 1:
+            Menú()
+        else:
+            Menú2()
 
     def Foto(self):
         global ruta_imagen
@@ -698,7 +703,7 @@ class Menú2:
         ventana10.destroy()
         Datos(2, id)
     def Presionó(self):
-        pass
+        ventana10.destroy()
     def salón(self):
         ventana10.destroy()
         observador = ObserverCSV()
