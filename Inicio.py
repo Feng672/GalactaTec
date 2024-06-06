@@ -1585,10 +1585,18 @@ class Juego:
         ]
 
         self.show_screen("GALAGA", "", None, extra_texts, images)
-        salon.write(self.user_id(self.user_place(first_place.player_number)))
-        salon.write(",")
-        salon.write(str(first_place.score))
-        salon.write("\n")
+
+
+        with open('records.csv', mode ='a', newline='') as archivo_csv:
+            archivo_csv.write(self.user_id(self.user_place(first_place.player_number)))
+            archivo_csv.write(",")
+            archivo_csv.write(str(first_place.score))
+            archivo_csv.write("\n")
+        #salon.write(self.user_id(self.user_place(first_place.player_number)))
+        #salon.write(",")
+        #salon.write(str(first_place.score))
+        #salon.write("\n")
+        #salon.close()
         observador = ObserverCSV()
         observador.__int__()
         pygame.quit()
