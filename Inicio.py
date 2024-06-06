@@ -1172,13 +1172,26 @@ class Juego:
             for fila in lector_csv:
                 if int(fila[7]) == numero_usuario:
                     jugador1 = fila[0]
+
                     print(jugador1)
                 elif int(fila[7]) == id2.get_valor():
                     jugador2 = fila[0]
+
                     print(jugador2)
         global user1
         global user2
+        global fotoU1
+        global fotoU2
         user1, user2 = random.sample([jugador1, jugador2],2)
+        with open(nombre_archivo, 'r', newline='') as archivo_csv:
+            lector_csv = csv.reader(archivo_csv)
+            for fila in lector_csv:
+                if fila[0] == user1:
+                    fotoU1 = fila[4]
+
+                elif fila[0] == user2:
+                    fotoU2 = fila[4]
+
         # Dimensiones de la ventana
         monitor_info = get_monitors()[0]
         screen_width = monitor_info.width
@@ -1360,14 +1373,17 @@ class Juego:
             self.draw_shield_bar(screen, 20, 35, player1.shield, player1.layers_shield)
             self.draw_text(screen, "Vidas:", 20, 42, 45)
 
+            screen.blit(player1.foto1, (160,10))
+
             for i in range(player1.lives):
                 screen.blit(player1.icon_life, (80 + i * 25, 50))
-
+            for i in range(current_player.lives):
+                screen.blit(current_player.icon_life, (80 + i * 25, 800))
             player1_text = f"Marcador: {player1.score}\nNivel: {player1.level.number}\nEnemigos Destruidos: {player1.cant_enemies_distroyed}"
 
             if player1.bonus_double_points_active and player1.bonus_double_points_end_time != 0:
                 player1_text += f"\nTiempo doble puntaje: {int(player1.bonus_double_points_end_time - time.time())}"
-            self.draw_text(screen, player1_text, 20, 110, 65)
+            self.draw_text(screen, player1_text, 20, 300, 65)
 
             # información jugador 2
             self.draw_text(screen, user2, 25, WIDTH - 250, 12,
@@ -1375,6 +1391,8 @@ class Juego:
                            left_align=True)
             self.draw_shield_bar(screen, WIDTH - 270, 35, player2.shield, player2.layers_shield)
             self.draw_text(screen, "Vidas:", 20, WIDTH - 250, 45)
+
+            screen.blit(player1.foto2, (1600, 10))
 
             for i in range(player2.lives):
                 screen.blit(player2.icon_life, (WIDTH - 200 + i * 25, 50))
@@ -1384,7 +1402,7 @@ class Juego:
             if player2.bonus_double_points_active and player2.bonus_double_points_end_time != 0:
                 player2_text += f"\nTiempo doble puntaje: {int(player2.bonus_double_points_end_time - time.time())}"
 
-            self.draw_text(screen, player2_text, 20, WIDTH - 180, 65)
+            self.draw_text(screen, player2_text, 20, WIDTH - 400, 65)
             game_over, winner, player1, player2 = self.check_game_over(player1, player2)
 
             if game_over and winner:
@@ -1979,8 +1997,8 @@ class BonusBar:
         self.selected_index = -1
 
     def update_positions(self):
-        start_x = 50
-        y_position = self.screen_height - self.bar_height
+        start_x = 1500
+        y_position = self.screen_height - self.bar_height - 40
         x = start_x
         for bonus in self.bonuses:
             bonus.rect.topleft = (x, y_position)
@@ -2074,6 +2092,8 @@ class Player(pygame.sprite.Sprite):
         self.icon_life = juego1.load_image("assets/extra_life_image.png", (15, 15))
         self.icon_life.set_colorkey(BLACK)
         self.image.set_colorkey(BLACK)
+        self.foto1 = juego1.load_image(fotoU1, (35,35))
+        self.foto2 = juego1.load_image(fotoU1, (35,35))
 
     def update(self):
         self.handle_movement()
