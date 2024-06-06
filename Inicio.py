@@ -1592,7 +1592,7 @@ class Juego:
             archivo_csv.write(",")
             archivo_csv.write(str(first_place.score))
             archivo_csv.write("\n")
-        
+
         observador = ObserverCSV()
         observador.__int__()
         pygame.quit()
