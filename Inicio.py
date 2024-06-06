@@ -25,6 +25,9 @@ BLUE = ( 0, 0, 255)
 global numero_usuario
 global id2
 global primeros_cinco
+global primeros_cinco_nuevo
+primeros_cinco_nuevo = []
+
 opcion_seleccionada = None
 opcion_seleccionada2 = None
 opcion_seleccionada3 = None
@@ -409,11 +412,11 @@ class Menú:
         ventana7.destroy()
         Datos(1,numero_usuario)
     def salón(self):
-        global primeros_cinco
+        global primeros_cinco_nuevo
         ventana7.destroy()
         observador = ObserverCSV()
         observador.__int__()
-        SalonDeLaFama(primeros_cinco,1)
+        SalonDeLaFama(primeros_cinco_nuevo,1)
     def ConfiPartida(self):
         ventana7.destroy()
         ConfiguracionDeLaPartida(1)
@@ -697,11 +700,10 @@ class Menú2:
     def Presionó(self):
         pass
     def salón(self):
-        global primeros_cinco
         ventana10.destroy()
         observador = ObserverCSV()
         observador.__int__()
-        SalonDeLaFama(primeros_cinco,2)
+        SalonDeLaFama(primeros_cinco_nuevo,2)
     def ConfiPartida(self):
         ventana10.destroy()
         ConfiguracionDeLaPartida(2)
@@ -788,7 +790,6 @@ class ObserverCSV:
     def __int__(self):
         global primeros_cinco
         global primeros_cinco_nuevo
-        primeros_cinco_nuevo = []
         global puntajes
         puntajes = []
         primeros_cinco = primeros_cinco_nuevo
@@ -805,6 +806,7 @@ class ObserverCSV:
                 # Si el primer elemento de la lista j es menor que el de j+1, intercambiar
                 if lista_de_puntuaciones[j][0] < lista_de_puntuaciones[j+1][0]:
                     lista_de_puntuaciones[j], lista_de_puntuaciones[j+1] = lista_de_puntuaciones[j+1], lista_de_puntuaciones[j]
+
 
 class SalonDeLaFama:
     def Iniciar_Variables(self, top5):
@@ -880,16 +882,16 @@ class SalonDeLaFama:
                 if int(fila[7]) == ganador1:
                     usuario1 = fila[0]
                     foto1 = fila[4]
-                elif int(fila[7]) == ganador2:
+                if int(fila[7]) == ganador2:
                     usuario2 = fila[0]
                     foto2 = fila[4]
-                elif int(fila[7]) == ganador3:
+                if int(fila[7]) == ganador3:
                     usuario3 = fila[0]
                     foto3 = fila[4]
-                elif int(fila[7]) == ganador4:
+                if int(fila[7]) == ganador4:
                     usuario4 = fila[0]
                     foto4 = fila[4]
-                elif int(fila[7]) == ganador5:
+                if int(fila[7]) == ganador5:
                     usuario5 = fila[0]
                     foto5 = fila[4]
 
@@ -938,13 +940,13 @@ class SalonDeLaFama:
         imagen14 = Image.open("Campeón.png")
         imagen15 = imagen14.resize(nuevo_tamaño)
         imagen16 = ImageTk.PhotoImage(imagen15)
-        label_imagen6 = tk.Label(image=imagen16)
+        label_imagen6 = tk.Label(ventana11, image=imagen16)
         label_imagen6.place(x=100, y=15)
         if puntuacion1 == 0:
             label19 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
             label19.place(x=450, y=100)
         else:
-            imagen1 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen1 = Image.open(foto1)
             imagen2 = imagen1.resize(nuevo_tamaño)
             imagen = ImageTk.PhotoImage(imagen2)
             label_imagen = tk.Label(ventana11, image=imagen)
@@ -957,7 +959,7 @@ class SalonDeLaFama:
             label20 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
             label20.place(x=450, y=200)
         else:
-            imagen2 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen2 = Image.open(foto2)
             imagen3 = imagen2.resize(nuevo_tamaño)
             imagen4 = ImageTk.PhotoImage(imagen3)
             label_imagen2 = tk.Label(ventana11, image=imagen4)
@@ -970,7 +972,7 @@ class SalonDeLaFama:
             label21 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
             label21.place(x=450, y=300)
         else:
-            imagen5 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen5 = Image.open(foto3)
             imagen6 = imagen5.resize(nuevo_tamaño)
             imagen7 = ImageTk.PhotoImage(imagen6)
             label_imagen3 = tk.Label(ventana11, image=imagen7)
@@ -983,7 +985,7 @@ class SalonDeLaFama:
             label22 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
             label22.place(x=450, y=400)
         else:
-            imagen8 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen8 = Image.open(foto4)
             imagen9 = imagen8.resize(nuevo_tamaño)
             imagen10 = ImageTk.PhotoImage(imagen9)
             label_imagen4 = tk.Label(ventana11, image=imagen10)
@@ -996,7 +998,7 @@ class SalonDeLaFama:
             label23 = Label(ventana11, text="Disponible", font=("fixedsys", 20), fg="white", bg="black")
             label23.place(x=450, y=500)
         else:
-            imagen11 = Image.open("C:/Users/PC/Desktop/2024/I semestre/Pruebas/Edison.png")
+            imagen11 = Image.open(foto5)
             imagen12 = imagen11.resize(nuevo_tamaño)
             imagen13 = ImageTk.PhotoImage(imagen12)
             label_imagen5 = tk.Label(ventana11, image=imagen13)
@@ -1522,15 +1524,13 @@ class Juego:
         salon.write(",")
         salon.write(str(first_place.score))
         salon.write("\n")
-        salon.close()
         observador = ObserverCSV()
         observador.__int__()
         pygame.quit()
-        #if primeros_cinco != primeros_cinco_nuevo:
-         #   messagebox.showinfo(message = "Se actualizó el salón de la fama", title = "New")
-        #else:
-         #   pass
-        print(primeros_cinco_nuevo)
+        if primeros_cinco != primeros_cinco_nuevo:
+            print("Se actualizó el salón de la fama")
+        else:
+            pass
         SalonDeLaFama(primeros_cinco_nuevo ,2)
 
     # Función para obtener el usuario del primer lugar y el segundo lugar
