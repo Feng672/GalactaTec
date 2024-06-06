@@ -1147,6 +1147,9 @@ class VentanaAyuda:
         label = Label(self.ventana13, text="Bono Vida Extra: Se le otorgará una vida de más al jugador",  font=("fixedsys", 15), fg="white", bg="black")
         label.pack(pady=(5, 5), anchor="n")
 
+        label = Label(self.ventana13, text="I para incrementar volumen y O para disminuir volumen", font=("fixedsys", 15), fg="white", bg="black")
+        label.pack(pady=(5, 5), anchor="n")
+
         # Botón para cerrar la ventana de ayuda
         boton_cerrar = Button(self.ventana13, text="Cerrar", command=self.cerrar_ventana, font=("fixedsys", 20), fg="white", bg="black")
         boton_cerrar.pack(side="top", pady=20)
@@ -1320,12 +1323,12 @@ class Juego:
                     volume = 0.5
                     if event.key == pygame.K_i:
                         # Incrementar el volumen
-                        volume = min(volume + 0.1, 1.0)
+                        volume = min(volume + 0.3, 1.0)
                         pygame.mixer.music.set_volume(volume)
 
                     elif event.key == pygame.K_o:
                         # Decrecmentar el volumen
-                        volume = max(volume - 0.1, 0.0)
+                        volume = max(volume - 0.3, 0.0)
                         pygame.mixer.music.set_volume(volume)
 
                     elif event.key == pygame.K_SPACE:
@@ -1407,7 +1410,7 @@ class Juego:
 
             if player1.bonus_double_points_active and player1.bonus_double_points_end_time != 0:
                 player1_text += f"\nTiempo doble puntaje: {int(player1.bonus_double_points_end_time - time.time())}"
-            self.draw_text(screen, player1_text, 20, 300, 65)
+            self.draw_text(screen, player1_text, 20, 400, 65)
 
             # información jugador 2
             self.draw_text(screen, user2, 25, WIDTH - 250, 12,
@@ -1426,7 +1429,7 @@ class Juego:
             if player2.bonus_double_points_active and player2.bonus_double_points_end_time != 0:
                 player2_text += f"\nTiempo doble puntaje: {int(player2.bonus_double_points_end_time - time.time())}"
 
-            self.draw_text(screen, player2_text, 20, WIDTH - 400, 65)
+            self.draw_text(screen, player2_text, 20, WIDTH - 500, 65)
             game_over, winner, player1, player2 = self.check_game_over(player1, player2)
 
             if game_over and winner:
@@ -1523,7 +1526,9 @@ class Juego:
             "- Utiliza 'espacio' para disparar.",
             "- Se habilitarán bonus aleatoriamente, debes chocar con ellos para activarlos.",
             "- Muevete con Z (izquierda) y X (derecha) entre la barra de bonus.",
-            "- Utiliza C para seleccionar el bonus por utilizar."
+            "- Utiliza C para seleccionar el bonus por utilizar.",
+            "- Utiliza I para aumentar el volumen de la música.",
+            "- Utiliza O para disminuir el volumen de la música."
         ]
         initial_height += 20
         for instruction in instructions:
@@ -2130,7 +2135,7 @@ class Player(pygame.sprite.Sprite):
         self.icon_life.set_colorkey(BLACK)
         self.image.set_colorkey(BLACK)
         self.foto1 = juego1.load_image(fotoU1, (35,35))
-        self.foto2 = juego1.load_image(fotoU1, (35,35))
+        self.foto2 = juego1.load_image(fotoU2, (35,35))
 
     def update(self):
         self.handle_movement()
