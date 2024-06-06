@@ -1309,7 +1309,19 @@ class Juego:
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
+                    if event.key == pygame.K_i:
+                        global volume
+                        volume = 0.5
+                        # Incrementar el volumen
+                        volume = min(volume + 0.1, 1.0)
+                        pygame.mixer.music.set_volume(volume)
+
+                    elif event.key == pygame.K_o:
+                        # Decrecmentar el volumen
+                        volume = max(volume - 0.1, 0.0)
+                        pygame.mixer.music.set_volume(volume)
+
+                    elif event.key == pygame.K_SPACE:
                         current_player.shoot(ship_list)
                     elif event.key == pygame.K_z:
                         bonus_bar.select_next("L")
@@ -1414,21 +1426,6 @@ class Juego:
                 self.end_screen(player1, player2)
                 need_reestart = True
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_i:
-                        global volume
-                        volume = 0.5
-                        # Incrementar el volumen
-                        volume = min(volume + 0.1, 1.0)
-                        pygame.mixer.music.set_volume(volume)
-
-                    elif event.key == pygame.K_o:
-                        # Decrecmentar el volumen
-                        volume = max(volume - 0.1, 0.0)
-                        pygame.mixer.music.set_volume(volume)
 
 
             pygame.display.flip()
