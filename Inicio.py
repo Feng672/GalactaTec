@@ -30,6 +30,7 @@ opcion_seleccionada2 = None
 opcion_seleccionada3 = None
 
 archivo = open("registro.csv", "a")
+salon = open("records.csv", "a")
 nombre_archivo = "registro.csv"
 archivoR = open("registro.csv", "r")
 ruta_musica = ''
@@ -786,14 +787,17 @@ class IniciarPartida:
 class ObserverCSV:
     def __int__(self):
         global primeros_cinco
+        global primeros_cinco_nuevo
+        primeros_cinco_nuevo = []
         global puntajes
         puntajes = []
-        with open(nombre_archivo, 'r') as file:
+        primeros_cinco = primeros_cinco_nuevo
+        with open("records.csv", 'r') as file:
             reader = csv.reader(file)
             for fila in reader:
-                puntajes.append([int(fila[10]),int(fila[7])])
+                puntajes.append([int(fila[1]),int(fila[0])])
         self.sort(puntajes)
-        primeros_cinco = puntajes[:5]
+        primeros_cinco_nuevo = puntajes[:5]
     def sort(self, lista_de_puntuaciones):
         n = len(lista_de_puntuaciones)
         for i in range(n):
@@ -1514,13 +1518,35 @@ class Juego:
         ]
 
         self.show_screen("GALAGA", "", None, extra_texts, images)
-        self.famous_lobby_screen()
+        salon.write(self.user_id(self.user_place(first_place.player_number)))
+        salon.write(",")
+        salon.write(str(first_place.score))
+        salon.write("\n")
+        salon.close()
+        observador = ObserverCSV()
+        observador.__int__()
+        pygame.quit()
+        #if primeros_cinco != primeros_cinco_nuevo:
+         #   messagebox.showinfo(message = "Se actualizó el salón de la fama", title = "New")
+        #else:
+         #   pass
+        print(primeros_cinco_nuevo)
+        SalonDeLaFama(primeros_cinco_nuevo ,2)
+
     # Función para obtener el usuario del primer lugar y el segundo lugar
     def user_place(self,num):
         if num == 1:
             return user1
         else:
             return user2
+
+    # Función para obtener el id de un usuario
+    def user_id(self, user):
+        with open(nombre_archivo, 'r') as file:
+            reader = csv.reader(file)
+            for fila in reader:
+                if fila[0] == user:
+                    return fila[7]
 
     # Función para mostrar la pantalla de cambio de nivel y permitir la selección de un patrón
     def level_change_screen(self, current_player):
