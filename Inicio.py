@@ -1023,11 +1023,20 @@ class ConfiguracionDeLaPartida:
         opcion_seleccionada = opcion.get()
         opcion_seleccionada2 = opcion2.get()
         opcion_seleccionada3 = opcion3.get()
-        ventana12.destroy()
-        if modo == 1:
-            Menú()
+        if opcion_seleccionada == opcion_seleccionada2 == opcion_seleccionada3:
+            messagebox.showwarning(message="No puedes elegir el mismo patrón para los 3 niveles", title="Advertencia")
+        elif opcion_seleccionada == opcion_seleccionada2:
+            messagebox.showwarning(message="No puede elegir el mismo patrón para el nivel 1 y 2", title="Advertencia")
+        elif opcion_seleccionada == opcion_seleccionada3:
+            messagebox.showwarning(message="No puedes elegir el mismo patrón para el nivel 1 y 3", title="Advertencia")
+        elif opcion_seleccionada2 == opcion_seleccionada3:
+            messagebox.showwarning(message="No puede elegir el mismo patrón para el nivel 2 y 3", title="Advertencia")
         else:
-            Menú2()
+            ventana12.destroy()
+            if modo == 1:
+                Menú()
+            else:
+                Menú2()
             
     def mostrar_ayuda(self):
         ventana12.destroy()
@@ -1043,7 +1052,7 @@ class ConfiguracionDeLaPartida:
         ventana12.configure(bg="black")
         label = Label(ventana12, text="Nivel 1", font=("fixedsys", 20), fg="white", bg="black")
         label.place(x=50, y=100)
-        opciones = ["Patrón 1", "Patrón 2", "Patrón 3", "Patrón 4", "Patrón 5"]
+        opciones = ["Zigzag", "Diagonal", "Spiral", "Patrón 4", "Patrón 5"]
         opcion = tk.StringVar(ventana12, value=opcion_seleccionada)
         menu_desplegable = ttk.Combobox(ventana12, textvariable=opcion, values=opciones)
         menu_desplegable.pack()
@@ -1554,44 +1563,20 @@ class Juego:
         screen.blit(background, [0, 0])
         # Mostrar el título y las instrucciones
         self.draw_text(screen, f"¡Jugador {current_player.player_number} avanzas de nivel!", 65, WIDTH // 2, HEIGHT // 4)
-        self.draw_text(screen, f"Selecciona el patrón para el nivel {current_player.level.number + 1}:", 27, WIDTH // 2,
-                  HEIGHT // 2 - 50)
-
-        # Definir las opciones de patrones
-        patterns = [
-            {"text": "Z - Patrón Zigzag", "size": 25, "x": WIDTH // 2, "y": HEIGHT // 2},
-            {"text": "D - Patrón Diagonal", "size": 25, "x": WIDTH // 2, "y": HEIGHT // 2 + 40},
-            {"text": "S - Patrón Spiral", "size": 25, "x": WIDTH // 2, "y": HEIGHT // 2 + 80},
-        ]
-
-        # Dibujar las opciones de patrones en la pantalla
-        for pattern in patterns:
-            self.draw_text(screen, pattern["text"], pattern["size"], pattern["x"], pattern["y"])
 
         # Mostrar la instrucción para continuar
-        self.draw_text(screen, "Presiona la tecla correspondiente para continuar", 20, WIDTH // 2, HEIGHT - 80, YELLOW)
+        self.draw_text(screen, "Presiona cualquier tecla para continuar", 20, WIDTH // 2, HEIGHT - 80, YELLOW)
         pygame.display.flip()
 
         # Esperar la selección del usuario
         waiting = True
-        selected_pattern = None
         while waiting:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
                 if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_z:
-                        selected_pattern = "Zigzag"
-                        waiting = False
-                    elif event.key == pygame.K_d:
-                        selected_pattern = "Diagonal"
-                        waiting = False
-                    elif event.key == pygame.K_s:
-                        selected_pattern = "Spiral"
-                        waiting = False
-
-        return selected_pattern
+                    waiting = False
 
     # Pantalla de continuar luego de cambiar de turno
     def continue_screen(self, current_player):
@@ -1762,8 +1747,18 @@ class Juego:
         if current_level.number < new_level_number and new_level_number <= 3:
             shared_level = levels[new_level_number - 1]
             shared_level.reset_ships_created()
-            pattern = self.level_change_screen(current_player)
-            shared_level.fly_pattern = pattern
+            if new_level_number == 1:
+                self.level_change_screen(current_player)
+                pattern = opcion_seleccionada
+                shared_level.fly_pattern = pattern
+            elif new_level_number == 2:
+                self.level_change_screen(current_player)
+                pattern = opcion_seleccionada2
+                shared_level.fly_pattern = pattern
+            elif new_level_number == 3:
+                self.level_change_screen(current_player)
+                pattern = opcion_seleccionada3
+                shared_level.fly_pattern = pattern
             current_player.level = shared_level
             self.remove_all_sprites(Ship)
             self.remove_all_sprites(Bullet)
@@ -1860,7 +1855,7 @@ class Juego:
         new_music_index = random.choice([i for i in range(3) if i not in used_music_indices])
         used_music_indices.append(new_music_index)
         image = ships_images[new_image_index]
-        fly_pattern = fly_patterns[new_pattern_index]
+        fly_pattern = opcion_seleccionada
         music = music_levels[new_music_index]
         level = Level(len(used_image_indices), image, fly_pattern, music)
         return level
