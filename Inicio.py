@@ -1540,6 +1540,11 @@ class Juego:
         player1_image = pygame.transform.scale(player1_image, (60, 60))
         player2_image = pygame.transform.scale(player2_image, (60, 60))
 
+        # Se carga la corona
+        crown = pygame.image.load("assets/crown.png").convert_alpha()
+        # Se escala la corona
+        crown = pygame.transform.scale(crown, (45, 45))
+
         # Cargar música de ceremonia
         pygame.mixer.music.load("assets/end_screen_sound.mp3")
         pygame.mixer.music.set_volume(1.0)  # Volumen entre 0.0 y 1.0
@@ -1568,7 +1573,8 @@ class Juego:
 
         images = [
             {"image": player1_image, "position": (WIDTH // 2 - 170, HEIGHT // 2 + 20)},
-            {"image": player2_image, "position": (WIDTH // 2 - 170, HEIGHT // 2 + 100)}
+            {"image": player2_image, "position": (WIDTH // 2 - 170, HEIGHT // 2 + 100)},
+            {"image": crown, "position": (WIDTH // 2 - 200, HEIGHT // 2 + 20)}
         ]
 
         self.show_screen("GALAGA", "", None, extra_texts, images)
