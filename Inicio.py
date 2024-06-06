@@ -1052,7 +1052,7 @@ class ConfiguracionDeLaPartida:
         ventana12.configure(bg="black")
         label = Label(ventana12, text="Nivel 1", font=("fixedsys", 20), fg="white", bg="black")
         label.place(x=50, y=100)
-        opciones = ["Zigzag", "Diagonal", "Spiral", "Patrón 4", "Patrón 5"]
+        opciones = ["Zigzag", "Diagonal", "Spiral", "Horizontal", "Senoidal"]
         opcion = tk.StringVar(ventana12, value=opcion_seleccionada)
         menu_desplegable = ttk.Combobox(ventana12, textvariable=opcion, values=opciones)
         menu_desplegable.pack()
@@ -1239,7 +1239,7 @@ class Juego:
 
         # Inicialización de niveles y jugadores
         global fly_patterns
-        fly_patterns = ["Diagonal", "Spiral", "Zigzag"]
+        fly_patterns = ["Diagonal", "Spiral", "Zigzag","Horizontal","Senoidal"]
         global music_levels
         music_levels = [
             "assets/level_1_pump_it.mp3",
@@ -2236,6 +2236,10 @@ class Ship(pygame.sprite.Sprite):
             self.move_in_spiral_pattern()
         elif self.pattern == "Zigzag":
             self.move_in_zigzag_pattern()
+        elif self.pattern == "Horizontal":
+            self.move_in_horizontal_pattern()
+        elif self.pattern == "Senoidal":
+            self.move_in_senoidal_pattern()
         global last_shot_time_game
         global current_time
         if current_time - last_shot_time_game >= self.shot_cooldown and current_time - self.last_shot_time >= self.shot_cooldown and self.can_shoot:
@@ -2285,8 +2289,30 @@ class Ship(pygame.sprite.Sprite):
             self.rect.bottom = 0
         elif self.rect.bottom < 0:
             self.rect.top = HEIGHT
-
-
+    def move_in_horizontal_pattern(self):
+        if self.rect.top <= 0:
+            self.rect.top = HEIGHT // 3
+        self.rect.x += self.speedx
+        if self.rect.right <= 0:
+            self.rect.left = WIDTH
+        elif self.rect.left >= WIDTH:
+            self.rect.right = 0
+        elif self.rect.top >= HEIGHT:
+            self.rect.bottom = 0
+        elif self.rect.bottom <= 0:
+            self.rect.top = HEIGHT
+    def move_in_senoidal_pattern(self):
+        self.angle += 0.1
+        self.rect.x += int(50 * math.cos(self.angle)) + self.speedx
+        self.rect.y += self.speedy
+        if self.rect.right <= 0:
+            self.rect.left = WIDTH
+        elif self.rect.left >= WIDTH:
+            self.rect.right = 0
+        elif self.rect.top >= HEIGHT:
+            self.rect.bottom = 0
+        elif self.rect.bottom <= 0:
+            self.rect.top = HEIGHT
 class Bullet(pygame.sprite.Sprite):
     EXPLOSIVE_RADIUS = 300
 
